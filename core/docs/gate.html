@@ -1,802 +1,741 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="">
-    <meta name="theme-color" content="#000000">
-    <meta name="robots" content="index, follow">
-    <meta name="keywords" content="API documentation, RESTful APIs, developer tools">
-    <meta property="og:title" content="">
-    <meta property="og:description" content="">
-    <meta property="og:type" content="website">
-    <title></title>
-<link rel="icon" id="favicon" href="/image/icon.png" type="image/png"><link rel="canonical" href="/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="website">
+  <title></title>
+  <link rel="icon" id="favicon" href="/image/icon.png" type="image/png">
+  <link rel="canonical" href="/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ── RESET ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    <!-- Google Fonts only -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    /* ── DESIGN TOKENS — Material You Dark ── */
+    :root {
+      /* Surface hierarchy */
+      --md-bg:        #0a0a0f;
+      --md-surf-1:    #12121a;
+      --md-surf-2:    #1a1a24;
+      --md-surf-3:    #22222e;
+      --md-surf-var:  #1e1e28;
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      /* Borders */
+      --md-out:       #2a2a38;
+      --md-out-var:   #38384a;
 
-    <style>
-        /* ── RESET ─────────────────────────────────────────── */
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+      /* Typography */
+      --md-on-bg:     #e8e8f2;
+      --md-on-surf:   #c8c8dc;
+      --md-on-surf-v: #8888a0;
+      --md-on-surf-d: #55556a;
 
-        /* ── DESIGN TOKENS ─────────────────────────────────── */
-        :root {
-            --bg:          #050508;
-            --surface:     #0e0e12;
-            --surface-2:   #16161b;
-            --border:      #252530;
-            --border-2:    #32323f;
-            --text-1:      #f0f0f5;      /* primary — near white */
-            --text-2:      #a0a0b8;      /* secondary — visible on dark */
-            --text-3:      #585870;      /* muted */
-            --gold:        #FBBF24;
-            --orange:      #F97316;
-            --gold-10:     rgba(251,191,36,0.10);
-            --gold-20:     rgba(251,191,36,0.20);
-            --gold-30:     rgba(251,191,36,0.30);
-            --green:       #4ade80;
-            --r-s:  6px;
-            --r-m:  10px;
-            --r-l:  14px;
-            --r-xl: 18px;
-            --fh: 'Space Grotesk', sans-serif;
-            --fm: 'Space Mono', monospace;
-        }
+      /* Primary — Amber/Gold (Material tone 80) */
+      --md-pri:       #fbbf24;
+      --md-pri-dim:   #d4900f;
+      --md-pri-cont:  #1a1200;
+      --md-pri-10:    rgba(251,191,36,0.10);
+      --md-pri-16:    rgba(251,191,36,0.16);
+      --md-pri-24:    rgba(251,191,36,0.24);
 
-        /* ── BASE ─────────────────────────────────────────── */
-        html { scroll-behavior: smooth; overflow-x: hidden; }
+      /* Secondary — Orange */
+      --md-sec:       #f97316;
+      --md-ter:       #4ade80;
 
-        body {
-            background: var(--bg);
-            color: var(--text-1);
-            font-family: var(--fm);
-            font-size: 13px;
-            line-height: 1.65;
-            min-height: 100vh;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+      /* Elevation overlays (MD3 tonal elevation) */
+      --md-elev-1: linear-gradient(rgba(251,191,36,0.05), rgba(251,191,36,0.05));
+      --md-elev-2: linear-gradient(rgba(251,191,36,0.08), rgba(251,191,36,0.08));
 
-        /* ── GRID BACKGROUND (visible) ─────────────────────── */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            /* Crossed-line grid — clearly visible against #050508 */
-            background-image:
-                linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
-            background-size: 44px 44px;
-            /* Subtle vignette to fade corners */
-            -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 40%, #000 50%, transparent 100%);
-            mask-image:         radial-gradient(ellipse 90% 90% at 50% 40%, #000 50%, transparent 100%);
-        }
+      /* Shape */
+      --md-shape-xs:  4px;
+      --md-shape-s:   8px;
+      --md-shape-m:   12px;
+      --md-shape-l:   16px;
+      --md-shape-xl:  24px;
+      --md-shape-full: 100px;
 
-        /* ── GLOW BLOBS ─────────────────────────────────────── */
-        .blob {
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(110px);
-        }
-        .blob-1 {
-            width: 480px; height: 480px;
-            background: radial-gradient(circle, rgba(251,191,36,0.10) 0%, transparent 65%);
-            top: -160px; right: -120px;
-        }
-        .blob-2 {
-            width: 360px; height: 360px;
-            background: radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 65%);
-            bottom: -120px; left: -80px;
-        }
+      /* Type */
+      --fh: 'Google Sans', 'Roboto', sans-serif;
+      --fd: 'Google Sans Display', 'Google Sans', sans-serif;
+      --fm: 'Roboto Mono', monospace;
 
-        /* ── LOADER ─────────────────────────────────────────── */
-        #loader {
-            position: fixed; inset: 0;
-            background: var(--bg);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            z-index: 9000;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        #loader.out { opacity: 0; visibility: hidden; pointer-events: none; }
+      /* Motion — MD3 standard durations */
+      --md-dur-s: 100ms;
+      --md-dur-m: 200ms;
+      --md-dur-l: 300ms;
+      --md-dur-xl: 500ms;
+      --md-ease:  cubic-bezier(0.2, 0, 0, 1);
+      --md-ease-e: cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
 
-        .ld-ring {
-            width: 34px; height: 34px;
-            border: 2px solid var(--border-2);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 0.75s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
+    /* ── BASE ── */
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      background: var(--md-bg);
+      color: var(--md-on-bg);
+      font-family: var(--fh);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        .ld-txt {
-            margin-top: 14px;
-            font-family: var(--fm);
-            font-size: 10px;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--text-3);
-        }
-        .ld-txt::after {
-            content: '';
-            animation: ldot 1.4s steps(4,end) infinite;
-        }
-        @keyframes ldot {
-            0%  { content: ''; }
-            25% { content: '.'; }
-            50% { content: '..'; }
-            75% { content: '...'; }
-        }
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(251,191,36,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(251,191,36,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 40%, transparent 100%);
+    }
 
-        /* ── HEADER ─────────────────────────────────────────── */
-        header {
-            position: sticky; top: 0; z-index: 500;
-            background: rgba(5,5,8,0.85);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--border);
-        }
-        .hdr {
-            max-width: 700px; margin: 0 auto;
-            padding: 0 22px; height: 56px;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .hdr-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .brand-pip {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: var(--gold); box-shadow: 0 0 8px var(--gold);
-            animation: pip 2.2s ease-in-out infinite; flex-shrink: 0;
-        }
-        @keyframes pip {
-            0%,100% { opacity: 1; transform: scale(1); }
-            50%      { opacity: 0.35; transform: scale(0.65); }
-        }
-        #headerTitle {
-            font-family: var(--fh); font-size: 14px; font-weight: 700;
-            color: var(--text-1); letter-spacing: -0.01em;
-        }
-        .hdr-btn {
-            font-family: var(--fm); font-size: 11px; font-weight: 700;
-            color: var(--text-1); text-decoration: none;
-            padding: 7px 16px; border: 1px solid var(--border-2);
-            border-radius: var(--r-s); background: var(--surface);
-            letter-spacing: 0.04em;
-            transition: border-color 0.18s, color 0.18s, box-shadow 0.18s;
-        }
-        .hdr-btn:hover {
-            border-color: var(--gold); color: var(--gold);
-            box-shadow: 0 0 12px var(--gold-10);
-        }
+    /* ── GLOW BLOBS ── */
+    .blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(130px); }
+    .blob-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(251,191,36,0.08) 0%, transparent 65%);
+      top: -180px; right: -140px;
+    }
+    .blob-2 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 65%);
+      bottom: -130px; left: -90px;
+    }
 
-        /* ── MAIN ─────────────────────────────────────────── */
-        main {
-            position: relative; z-index: 1;
-            max-width: 700px; margin: 0 auto;
-            padding: 0 22px 88px;
-            opacity: 0; transform: translateY(20px);
-            transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1),
-                        transform 0.65s cubic-bezier(0.16,1,0.3,1);
-        }
-        main.show { opacity: 1; transform: translateY(0); }
+    /* ── MD RIPPLE ── */
+    .md-ripple { position: relative; overflow: hidden; }
+    .md-ripple::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(circle, rgba(251,191,36,0.18) 0%, transparent 70%);
+      opacity: 0; transform: scale(0);
+      transition: opacity var(--md-dur-m) var(--md-ease), transform 0s;
+    }
+    .md-ripple:active::after { opacity: 1; transform: scale(2.5); transition: transform var(--md-dur-l) var(--md-ease), opacity var(--md-dur-s); }
 
-        /* ── HERO ─────────────────────────────────────────── */
-        .hero {
-            padding: 60px 0 52px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-        }
+    /* ── LOADER ── */
+    #loader {
+      position: fixed; inset: 0; background: var(--md-bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 9000; transition: opacity var(--md-dur-xl) var(--md-ease), visibility var(--md-dur-xl) var(--md-ease);
+    }
+    #loader.out { opacity: 0; visibility: hidden; pointer-events: none; }
+    .ld-ring {
+      width: 36px; height: 36px;
+      border: 3px solid var(--md-out-var); border-top-color: var(--md-pri);
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .ld-txt {
+      margin-top: 16px; font-family: var(--fh); font-size: 11px;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--md-on-surf-d);
+    }
+    .ld-txt::after { content: ''; animation: ldot 1.4s steps(4,end) infinite; }
+    @keyframes ldot { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
 
-        /* Status badge */
-        .badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            font-family: var(--fm); font-size: 9px;
-            letter-spacing: 0.2em; text-transform: uppercase;
-            color: var(--gold); background: var(--gold-10);
-            border: 1px solid rgba(251,191,36,0.25);
-            padding: 5px 14px; border-radius: 100px; margin-bottom: 28px;
-        }
-        .badge-dot {
-            width: 5px; height: 5px; border-radius: 50%;
-            background: var(--gold); animation: pip 2.2s ease-in-out infinite;
-        }
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 500;
+      background: rgba(10,10,15,0.88);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--md-out);
+      /* MD3 top app bar elevation */
+      box-shadow: 0 1px 0 var(--md-out), 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .hdr {
+      max-width: 720px; margin: 0 auto; padding: 0 24px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .hdr-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-pip {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--md-pri); box-shadow: 0 0 10px var(--md-pri);
+      animation: pip 2.4s ease-in-out infinite; flex-shrink: 0;
+    }
+    @keyframes pip { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.6)} }
+    #headerTitle {
+      font-family: var(--fd); font-size: 15px; font-weight: 700;
+      color: var(--md-on-bg); letter-spacing: -0.01em;
+    }
+    /* MD3 Tonal button */
+    .hdr-btn {
+      font-family: var(--fh); font-size: 13px; font-weight: 500;
+      color: var(--md-pri); text-decoration: none;
+      padding: 8px 18px;
+      border: 1px solid rgba(251,191,36,0.3);
+      border-radius: var(--md-shape-full);
+      background: var(--md-pri-10);
+      letter-spacing: 0.01em;
+      transition: background var(--md-dur-m) var(--md-ease), border-color var(--md-dur-m), box-shadow var(--md-dur-m);
+    }
+    .hdr-btn:hover {
+      background: var(--md-pri-16);
+      border-color: rgba(251,191,36,0.5);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 8px var(--md-pri-10);
+    }
 
-        /* Hero image — size driven by JS from config.json imageSize */
-        .hero-img-wrap {
-            border-radius: var(--r-xl);
-            overflow: hidden;
-            border: 1px solid var(--border-2);
-            box-shadow: 0 0 50px rgba(251,191,36,0.12), 0 20px 60px rgba(0,0,0,0.6);
-            margin-bottom: 30px;
-            position: relative;
-            /* default sizes — overridden by JS */
-            width: 40%; /* desktop fallback */
-            max-width: 360px;
-            aspect-ratio: auto;
-            flex-shrink: 0;
-        }
-        .hero-img-wrap::after {
-            content: '';
-            position: absolute; inset: 0;
-            background: linear-gradient(145deg, rgba(251,191,36,0.06) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        #headerImage {
-            width: 100%; height: auto; display: block;
-            object-fit: cover;
-        }
+    /* ── MAIN ── */
+    main {
+      position: relative; z-index: 1;
+      max-width: 720px; margin: 0 auto;
+      padding: 0 24px 100px;
+      opacity: 0; transform: translateY(24px);
+      transition: opacity var(--md-dur-xl) var(--md-ease-e), transform var(--md-dur-xl) var(--md-ease-e);
+    }
+    main.show { opacity: 1; transform: translateY(0); }
 
-        /* Hero copy */
-        .hero-title {
-            font-family: var(--fh);
-            font-size: clamp(28px, 5.5vw, 46px);
-            font-weight: 700; line-height: 1.1;
-            letter-spacing: -0.025em; color: var(--text-1); margin-bottom: 14px;
-        }
-        .grad {
-            background: linear-gradient(90deg, var(--gold), var(--orange));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero-sub {
-            font-family: var(--fm); font-size: 12px; line-height: 1.8;
-            color: var(--text-2);           /* was 808080, now #a0a0b8 — visible */
-            max-width: 420px; margin-bottom: 28px;
-        }
+    /* ── HERO ── */
+    .hero {
+      padding: 64px 0 56px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    /* MD3 Assist chip as badge */
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--fh); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--md-pri); background: var(--md-pri-10);
+      border: 1px solid rgba(251,191,36,0.2);
+      padding: 6px 16px; border-radius: var(--md-shape-full);
+      margin-top: 4px; margin-bottom: 24px;
+    }
+    .badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--md-pri); animation: pip 2.4s ease-in-out infinite;
+    }
+    .hero-img-wrap {
+      border-radius: var(--md-shape-xl);
+      overflow: hidden;
+      border: 1px solid var(--md-out-var);
+      /* MD3 elevation level 3 */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3), 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(251,191,36,0.06);
+      margin-bottom: 36px;
+      position: relative;
+      width: 40%; max-width: 360px; flex-shrink: 0;
+    }
+    .hero-img-wrap::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(160deg, rgba(251,191,36,0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    #headerImage { width: 100%; height: auto; display: block; object-fit: cover; }
 
-        /* Stats chip */
-        .stats-chip {
-            display: inline-flex; background: var(--surface);
-            border: 1px solid var(--border-2);
-            border-radius: var(--r-m); overflow: hidden; margin-bottom: 30px;
-        }
-        .stat { padding: 10px 22px; text-align: center; position: relative; }
-        .stat + .stat::before {
-            content: ''; position: absolute; left: 0; top: 18%; height: 64%;
-            width: 1px; background: var(--border-2);
-        }
-        .sv {
-            font-family: var(--fh); font-size: 20px; font-weight: 700;
-            color: var(--gold); line-height: 1; display: block;
-        }
-        .sl {
-            font-family: var(--fm); font-size: 9px; color: var(--text-3);
-            text-transform: uppercase; letter-spacing: 0.12em;
-            margin-top: 4px; display: block;
-        }
+    /* MD3 Display typography */
+    .hero-title {
+      font-family: var(--fd);
+      font-size: clamp(30px, 6vw, 50px);
+      font-weight: 700; line-height: 1.08;
+      letter-spacing: -0.02em; color: var(--md-on-bg); margin-bottom: 16px;
+    }
+    .grad {
+      background: linear-gradient(100deg, var(--md-pri) 0%, var(--md-sec) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub {
+      font-family: var(--fh); font-size: 14px; line-height: 1.75;
+      color: var(--md-on-surf); max-width: 440px; margin-bottom: 32px;
+    }
 
-        /* Buttons */
-        .btns { display: flex; gap: 9px; flex-wrap: wrap; justify-content: center; }
-        .btn {
-            display: inline-flex; align-items: center; gap: 7px;
-            font-family: var(--fm); font-size: 11px; font-weight: 700;
-            letter-spacing: 0.05em; padding: 10px 22px;
-            border-radius: var(--r-s); border: 1px solid transparent;
-            text-decoration: none; transition: all 0.18s ease;
-            white-space: nowrap; cursor: pointer;
-        }
-        .btn-fill {
-            background: linear-gradient(130deg, var(--gold), var(--orange));
-            color: #000;
-        }
-        .btn-fill:hover {
-            opacity: 0.82; transform: translateY(-1px);
-            box-shadow: 0 6px 22px var(--gold-20);
-        }
-        .btn-outline {
-            background: transparent; border-color: var(--border-2); color: var(--text-2);
-        }
-        .btn-outline:hover { color: var(--text-1); background: var(--surface-2); border-color: var(--border-2); }
+    /* MD3 Card — tonal */
+    .stats-chip {
+      display: inline-flex; background: var(--md-surf-1);
+      border: 1px solid var(--md-out);
+      border-radius: var(--md-shape-l); overflow: hidden; margin-bottom: 36px;
+    }
+    .stat { padding: 12px 24px; text-align: center; position: relative; }
+    .stat + .stat::before {
+      content: ''; position: absolute; left: 0; top: 20%; height: 60%;
+      width: 1px; background: var(--md-out);
+    }
+    .sv {
+      font-family: var(--fd); font-size: 22px; font-weight: 700;
+      color: var(--md-pri); line-height: 1; display: block;
+    }
+    .sl {
+      font-family: var(--fh); font-size: 10px; color: var(--md-on-surf-v);
+      text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; display: block;
+    }
 
-        /* ── DIVIDER ─────────────────────────────────────────── */
-        .div {
-            height: 1px; background: var(--border); margin: 52px 0; position: relative;
-        }
-        .div::before {
-            content: ''; position: absolute; left: 0; top: 0;
-            width: 80px; height: 1px;
-            background: linear-gradient(90deg, var(--gold), transparent);
-        }
+    /* ── MD3 BUTTONS ── */
+    .btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--fh); font-size: 13px; font-weight: 500;
+      letter-spacing: 0.01em; padding: 10px 24px;
+      border-radius: var(--md-shape-full); border: none;
+      text-decoration: none;
+      transition: box-shadow var(--md-dur-m) var(--md-ease), background var(--md-dur-m), opacity var(--md-dur-m), transform var(--md-dur-s);
+      white-space: nowrap; cursor: pointer;
+      /* Kill browser default blue focus */
+      outline: none;
+    }
+    .btn:focus-visible { outline: 2px solid var(--md-pri); outline-offset: 2px; }
+    /* MD3 Filled button */
+    .btn-fill {
+      background: linear-gradient(135deg, var(--md-pri) 0%, var(--md-sec) 100%);
+      color: #000; font-weight: 600;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+    .btn-fill:hover {
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(251,191,36,0.3);
+      opacity: 0.92; transform: translateY(-1px);
+    }
+    .btn-fill:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(0,0,0,0.3); opacity: 1; }
+    /* MD3 Outlined button */
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--md-out-var);
+      color: var(--md-on-surf);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.04); border-color: var(--md-out-var); color: var(--md-on-bg); }
 
-        /* ── SECTION HEADER ─────────────────────────────────── */
-        .sec-tag {
-            font-family: var(--fm); font-size: 9px; letter-spacing: 0.22em;
-            text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
-        }
-        .sec-h {
-            font-family: var(--fh); font-size: clamp(17px, 3vw, 22px);
-            font-weight: 700; color: var(--text-1);
-            letter-spacing: -0.015em; margin-bottom: 20px;
-        }
+    /* ── DIVIDER ── */
+    .div { height: 1px; background: var(--md-out); margin: 56px 0; position: relative; }
+    .div::before {
+      content: ''; position: absolute; left: 0; top: 0;
+      width: 88px; height: 1px;
+      background: linear-gradient(90deg, var(--md-pri), transparent);
+    }
 
-        /* ── FEATURES ─────────────────────────────────────────── */
-        .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-        @media (max-width: 520px) { .feat-grid { grid-template-columns: 1fr; } }
+    /* ── SECTION ── */
+    .sec-tag {
+      font-family: var(--fh); font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--md-pri); margin-bottom: 8px;
+    }
+    .sec-h {
+      font-family: var(--fd); font-size: clamp(18px, 3vw, 24px);
+      font-weight: 700; color: var(--md-on-bg); letter-spacing: -0.01em; margin-bottom: 24px;
+    }
 
-        .feat {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--r-l); padding: 18px 16px;
-            transition: border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s;
-            position: relative; overflow: hidden;
-        }
-        .feat::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            opacity: 0; transition: opacity 0.2s;
-        }
-        .feat:hover {
-            border-color: var(--border-2); background: var(--surface-2);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 32px rgba(0,0,0,0.45);
-        }
-        .feat:hover::before { opacity: 1; }
-        .feat-ico {
-            width: 34px; height: 34px; border-radius: 8px;
-            background: var(--gold-10); border: 1px solid rgba(251,191,36,0.2);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; color: var(--gold); margin-bottom: 12px;
-        }
-        .feat-name {
-            font-family: var(--fh); font-size: 13px; font-weight: 600;
-            color: var(--text-1); margin-bottom: 6px;
-        }
-        .feat-body {
-            font-family: var(--fm); font-size: 11px; line-height: 1.7;
-            color: var(--text-2);           /* visible secondary */
-        }
+    /* ── FEATURES — MD3 Cards ── */
+    .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    @media (max-width: 520px) { .feat-grid { grid-template-columns: 1fr; } }
 
-        /* ── STEPS ─────────────────────────────────────────── */
-        .steps {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--r-xl); overflow: hidden;
-        }
-        .step {
-            display: flex; align-items: flex-start; gap: 14px;
-            padding: 18px 22px; transition: background 0.16s;
-        }
-        .step + .step { border-top: 1px solid var(--border); }
-        .step:hover { background: var(--surface-2); }
-        .step-n {
-            flex-shrink: 0; width: 27px; height: 27px; border-radius: 50%;
-            background: var(--gold-10); border: 1px solid rgba(251,191,36,0.26);
-            display: flex; align-items: center; justify-content: center;
-            font-family: var(--fh); font-size: 11px; font-weight: 700;
-            color: var(--gold); margin-top: 1px;
-        }
-        .step-h {
-            font-family: var(--fh); font-size: 13px; font-weight: 600;
-            color: var(--text-1); margin-bottom: 3px;
-        }
-        .step-p {
-            font-family: var(--fm); font-size: 11px; line-height: 1.7;
-            color: var(--text-2);
-        }
+    .feat {
+      background: var(--md-surf-1); border: 1px solid var(--md-out);
+      border-radius: var(--md-shape-xl); padding: 20px 18px;
+      transition: border-color var(--md-dur-m) var(--md-ease), background var(--md-dur-m), transform var(--md-dur-l) var(--md-ease-e), box-shadow var(--md-dur-l) var(--md-ease-e);
+      position: relative; overflow: hidden; cursor: default;
+    }
+    /* MD3 state layer */
+    .feat::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--md-pri-10); opacity: 0;
+      transition: opacity var(--md-dur-m) var(--md-ease);
+      pointer-events: none;
+    }
+    .feat:hover::before { opacity: 1; }
+    .feat:hover {
+      border-color: rgba(251,191,36,0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(251,191,36,0.1);
+    }
+    .feat-ico {
+      width: 40px; height: 40px; border-radius: var(--md-shape-m);
+      background: var(--md-pri-10); border: 1px solid rgba(251,191,36,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: var(--md-pri); margin-bottom: 14px;
+    }
+    .feat-name {
+      font-family: var(--fh); font-size: 14px; font-weight: 600;
+      color: var(--md-on-bg); margin-bottom: 6px;
+    }
+    .feat-body {
+      font-family: var(--fh); font-size: 12px; line-height: 1.65;
+      color: var(--md-on-surf);
+    }
 
-        /* ── TERMS ─────────────────────────────────────────── */
-        .terms-box {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--r-xl); padding: 24px;
-        }
-        .terms-intro {
-            font-family: var(--fm); font-size: 12px;
-            color: var(--text-2); margin-bottom: 16px; line-height: 1.75;
-        }
-        .terms-list {
-            list-style: none; display: flex; flex-direction: column;
-            gap: 10px; margin-bottom: 16px;
-        }
-        .terms-list li {
-            display: flex; align-items: flex-start; gap: 10px;
-            font-family: var(--fm); font-size: 12px; line-height: 1.65;
-            color: var(--text-2);
-        }
-        .terms-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
-        .terms-note {
-            font-family: var(--fm); font-size: 11px; color: var(--text-3);
-            padding-top: 14px; border-top: 1px solid var(--border);
-        }
-        .terms-note a { color: var(--gold); text-decoration: none; }
-        .terms-note a:hover { text-decoration: underline; }
+    /* ── STEPS — MD3 List ── */
+    .steps {
+      background: var(--md-surf-1); border: 1px solid var(--md-out);
+      border-radius: var(--md-shape-xl); overflow: hidden;
+    }
+    .step {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 20px 24px; transition: background var(--md-dur-m) var(--md-ease);
+      position: relative;
+    }
+    .step + .step { border-top: 1px solid var(--md-out); }
+    .step:hover { background: rgba(251,191,36,0.03); }
+    .step-n {
+      flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+      background: var(--md-pri-10); border: 1px solid rgba(251,191,36,0.22);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--fd); font-size: 12px; font-weight: 700;
+      color: var(--md-pri); margin-top: 1px;
+    }
+    .step-h {
+      font-family: var(--fh); font-size: 14px; font-weight: 600;
+      color: var(--md-on-bg); margin-bottom: 4px;
+    }
+    .step-p { font-family: var(--fh); font-size: 12px; line-height: 1.65; color: var(--md-on-surf); }
 
-        /* ── CTA BANNER ─────────────────────────────────────── */
-        .cta {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--r-xl); overflow: hidden; position: relative;
-        }
-        .cta::before {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(145deg, rgba(251,191,36,0.04) 0%, transparent 55%);
-            pointer-events: none;
-        }
-        .cta-body { padding: 30px; }
-        @media (max-width: 440px) { .cta-body { padding: 22px 18px; } }
-        .cta-live { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-        .cta-pip {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: var(--green); box-shadow: 0 0 7px var(--green);
-        }
-        .cta-live-txt {
-            font-family: var(--fm); font-size: 9px; letter-spacing: 0.18em;
-            text-transform: uppercase; color: var(--green);
-        }
-        .cta-h {
-            font-family: var(--fh); font-size: clamp(17px,3.5vw,22px); font-weight: 700;
-            color: var(--text-1); letter-spacing: -0.015em; margin-bottom: 10px;
-        }
-        .cta-p {
-            font-family: var(--fm); font-size: 12px; line-height: 1.8;
-            color: var(--text-2); max-width: 400px; margin-bottom: 24px;
-        }
-        .cta-pills {
-            border-top: 1px solid var(--border); padding: 14px 30px;
-            display: flex; flex-wrap: wrap; gap: 18px;
-        }
-        @media (max-width: 440px) { .cta-pills { padding: 14px 18px; gap: 12px; } }
-        .pill {
-            display: flex; align-items: center; gap: 7px;
-            font-family: var(--fm); font-size: 10px; color: var(--text-3);
-        }
-        .pill i { font-size: 10px; color: var(--gold); }
+    /* ── TERMS ── */
+    .terms-box {
+      background: var(--md-surf-1); border: 1px solid var(--md-out);
+      border-radius: var(--md-shape-xl); padding: 28px;
+    }
+    .terms-intro { font-family: var(--fh); font-size: 13px; color: var(--md-on-surf); margin-bottom: 18px; line-height: 1.75; }
+    .terms-list { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 18px; }
+    .terms-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-family: var(--fh); font-size: 13px; line-height: 1.6; color: var(--md-on-surf);
+    }
+    .terms-list li::before { content: '—'; color: var(--md-pri); flex-shrink: 0; font-weight: 700; }
+    .terms-note {
+      font-family: var(--fh); font-size: 12px; color: var(--md-on-surf-d);
+      padding-top: 16px; border-top: 1px solid var(--md-out);
+    }
+    .terms-note a { color: var(--md-pri); text-decoration: none; }
+    .terms-note a:hover { text-decoration: underline; }
 
-        /* ── FOOTER ─────────────────────────────────────────── */
-        footer {
-            position: relative; z-index: 1;
-            border-top: 1px solid var(--border);
-            background: rgba(5,5,8,0.92);
-        }
-        .ftr { max-width: 700px; margin: 0 auto; padding: 36px 22px 28px; }
-        .ftr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 26px; }
-        @media (max-width: 440px) { .ftr-grid { grid-template-columns: 1fr; gap: 20px; } }
-        .ftr-h {
-            font-family: var(--fh); font-size: 12px; font-weight: 600;
-            color: var(--text-1); margin-bottom: 8px;
-        }
-        .ftr-p { font-family: var(--fm); font-size: 11px; line-height: 1.75; color: var(--text-2); }
-        .soc-row { display: flex; gap: 7px; }
-        .soc {
-            width: 34px; height: 34px; display: flex;
-            align-items: center; justify-content: center;
-            border-radius: var(--r-s); border: 1px solid var(--border);
-            background: var(--surface); color: var(--text-2);
-            font-size: 14px; text-decoration: none;
-            transition: border-color 0.18s, color 0.18s, background 0.18s, box-shadow 0.18s;
-        }
-        .soc:hover {
-            border-color: var(--gold); color: var(--gold);
-            background: var(--gold-10); box-shadow: 0 0 10px var(--gold-10);
-        }
-        .ftr-bottom {
-            padding-top: 18px; border-top: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between;
-            flex-wrap: wrap; gap: 8px;
-        }
-        .ftr-copy { font-family: var(--fm); font-size: 10px; color: var(--text-3); }
-        .ftr-tag  { font-family: var(--fm); font-size: 9px; letter-spacing: 0.1em; color: var(--text-3); }
+    /* ── CTA BANNER ── */
+    .cta {
+      background: var(--md-surf-1); border: 1px solid var(--md-out);
+      border-radius: var(--md-shape-xl); overflow: hidden; position: relative;
+    }
+    .cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(150deg, rgba(251,191,36,0.04) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .cta-body { padding: 32px; }
+    @media (max-width: 440px) { .cta-body { padding: 24px 20px; } }
+    .cta-live { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .cta-pip { width: 8px; height: 8px; border-radius: 50%; background: var(--md-ter); box-shadow: 0 0 8px var(--md-ter); }
+    .cta-live-txt {
+      font-family: var(--fh); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--md-ter);
+    }
+    .cta-h {
+      font-family: var(--fd); font-size: clamp(18px,3.5vw,24px); font-weight: 700;
+      color: var(--md-on-bg); letter-spacing: -0.01em; margin-bottom: 12px;
+    }
+    .cta-p {
+      font-family: var(--fh); font-size: 13px; line-height: 1.75;
+      color: var(--md-on-surf); max-width: 420px; margin-bottom: 28px;
+    }
+    .cta-pills {
+      border-top: 1px solid var(--md-out); padding: 16px 32px;
+      display: flex; flex-wrap: wrap; gap: 20px;
+    }
+    @media (max-width: 440px) { .cta-pills { padding: 16px 20px; gap: 14px; } }
+    .pill {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--fh); font-size: 11px; color: var(--md-on-surf-v);
+    }
+    .pill i { font-size: 11px; color: var(--md-pri); }
 
-        /* ── SCROLLBAR ─────────────────────────────────────── */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #444; }
-        @media (max-width: 767px) { ::-webkit-scrollbar { display: none; } }
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--md-out);
+      background: rgba(10,10,15,0.95);
+    }
+    .ftr { max-width: 720px; margin: 0 auto; padding: 40px 24px 32px; }
+    .ftr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 28px; }
+    @media (max-width: 440px) { .ftr-grid { grid-template-columns: 1fr; gap: 24px; } }
+    .ftr-h { font-family: var(--fh); font-size: 13px; font-weight: 600; color: var(--md-on-bg); margin-bottom: 8px; }
+    .ftr-p { font-family: var(--fh); font-size: 12px; line-height: 1.75; color: var(--md-on-surf); }
+    .soc-row { display: flex; gap: 8px; }
+    /* MD3 Icon button */
+    .soc {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--md-shape-s); border: 1px solid var(--md-out);
+      background: var(--md-surf-1); color: var(--md-on-surf-v);
+      font-size: 15px; text-decoration: none;
+      transition: border-color var(--md-dur-m), color var(--md-dur-m), background var(--md-dur-m), box-shadow var(--md-dur-m);
+      outline: none;
+    }
+    .soc:hover {
+      border-color: rgba(251,191,36,0.4); color: var(--md-pri);
+      background: var(--md-pri-10); box-shadow: 0 0 12px var(--md-pri-10);
+    }
+    .ftr-bottom {
+      padding-top: 20px; border-top: 1px solid var(--md-out);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
+    }
+    .ftr-copy { font-family: var(--fh); font-size: 11px; color: var(--md-on-surf-d); }
+    .ftr-tag { font-family: var(--fm); font-size: 10px; letter-spacing: 0.08em; color: var(--md-on-surf-d); }
 
-        /* ── STAGGER ENTRANCE ─────────────────────────────── */
-        .stagger > * { opacity: 0; transform: translateY(12px); }
-        .stagger.in > * { animation: fuup 0.42s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .stagger.in > *:nth-child(1) { animation-delay: 0.04s; }
-        .stagger.in > *:nth-child(2) { animation-delay: 0.11s; }
-        .stagger.in > *:nth-child(3) { animation-delay: 0.18s; }
-        @keyframes fuup { to { opacity: 1; transform: translateY(0); } }
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--md-out-var); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--md-on-surf-d); }
+    @media (max-width: 767px) { ::-webkit-scrollbar { display: none; } }
 
-        /* ── RESPONSIVE IMAGE SIZES ───────────────────────── */
-        /* These are overridden per-device by JS using config.json imageSize */
-        @media (max-width: 639px) {
-            .hero-img-wrap { width: var(--img-mobile, 80%); max-width: 100%; }
-        }
-        @media (min-width: 640px) and (max-width: 1023px) {
-            .hero-img-wrap { width: var(--img-tablet, 40%); max-width: 300px; }
-        }
-        @media (min-width: 1024px) {
-            .hero-img-wrap { width: var(--img-desktop, 40%); max-width: 360px; }
-        }
-    </style>
+    /* ── STAGGER ── */
+    .stagger > * { opacity: 0; transform: translateY(14px); }
+    .stagger.in > * { animation: md-rise 0.45s var(--md-ease-e) forwards; }
+    .stagger.in > *:nth-child(1) { animation-delay: 0.04s; }
+    .stagger.in > *:nth-child(2) { animation-delay: 0.12s; }
+    .stagger.in > *:nth-child(3) { animation-delay: 0.20s; }
+    @keyframes md-rise { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── RESPONSIVE IMAGE ── */
+    @media (max-width: 639px) { .hero-img-wrap { width: var(--img-mobile, 82%); max-width: 100%; } }
+    @media (min-width: 640px) and (max-width: 1023px) { .hero-img-wrap { width: var(--img-tablet, 42%); max-width: 300px; } }
+    @media (min-width: 1024px) { .hero-img-wrap { width: var(--img-desktop, 40%); max-width: 360px; } }
+
+    /* Kill all default browser blue outlines & selections */
+    *, *:focus { outline: none; -webkit-tap-highlight-color: transparent; }
+    a, button { -webkit-tap-highlight-color: transparent; }
+    ::selection { background: var(--md-pri-24); color: var(--md-on-bg); }
+  </style>
 </head>
 <body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
 
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
+  <div id="loader">
+    <div class="ld-ring"></div>
+    <span class="ld-txt">loading</span>
+  </div>
 
-    <!-- Loader -->
-    <div id="loader">
-        <div class="ld-ring"></div>
-        <span class="ld-txt">loading</span>
+  <header>
+    <div class="hdr">
+      <a href="/" class="hdr-brand">
+        <div class="brand-pip"></div>
+        <span id="headerTitle"></span>
+      </a>
+      <a href="/docs" class="hdr-btn md-ripple">Docs →</a>
     </div>
+  </header>
 
-    <!-- Header -->
-    <header>
-        <div class="hdr">
-            <a href="/" class="hdr-brand">
-                <div class="brand-pip"></div>
-                <span id="headerTitle"></span>
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-img-wrap" id="heroImgWrap">
+        <img id="headerImage" src="" alt="API" loading="eager">
+      </div>
+      <h1 class="hero-title">Welcome to&nbsp;<span class="grad" id="apiName"></span></h1>
+      <p class="hero-sub" id="apiDescription"></p>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span id="headerStatus">API Platform</span>
+      </div>
+      <div class="stats-chip">
+        <div class="stat"><span class="sv" id="totalEndpoints">—</span><span class="sl">Endpoints</span></div>
+        <div class="stat"><span class="sv" id="totalCategories">—</span><span class="sl">Categories</span></div>
+        <div class="stat"><span class="sv">Free</span><span class="sl">Always</span></div>
+      </div>
+      <div class="btns">
+        <a href="/docs" class="btn btn-fill md-ripple">
+          <i class="fas fa-book-open" style="font-size:11px;"></i>View Docs
+        </a>
+        <a href="#features" class="btn btn-outline md-ripple">Explore ↓</a>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <p class="sec-tag">Capabilities</p>
+      <h2 class="sec-h">Key Features</h2>
+      <div class="feat-grid stagger">
+        <div class="feat">
+          <div class="feat-ico"><i class="fas fa-bolt"></i></div>
+          <div class="feat-name">Lightning Fast</div>
+          <p class="feat-body">Optimized endpoints with low-latency responses for seamless integration.</p>
+        </div>
+        <div class="feat">
+          <div class="feat-ico"><i class="fas fa-unlock-alt"></i></div>
+          <div class="feat-name">No Auth Required</div>
+          <p class="feat-body">Instant access — no keys, no setup, zero overhead to get started.</p>
+        </div>
+        <div class="feat">
+          <div class="feat-ico"><i class="fas fa-code"></i></div>
+          <div class="feat-name">Clean JSON</div>
+          <p class="feat-body">Standardized JSON outputs with detailed docs and practical examples.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="div"></div>
+
+    <!-- GETTING STARTED -->
+    <section id="getting-started">
+      <p class="sec-tag">Quickstart</p>
+      <h2 class="sec-h">Getting Started</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div>
+            <div class="step-h">Select a Category</div>
+            <p class="step-p">Browse API groups in the docs sidebar to find the right endpoint.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div>
+            <div class="step-h">Review Documentation</div>
+            <p class="step-p">Examine parameters, response shapes, and code examples for each endpoint.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div>
+            <div class="step-h">Implement & Integrate</div>
+            <p class="step-p">Fire HTTP requests and plug JSON responses directly into your application.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="div"></div>
+
+    <!-- TERMS -->
+    <section id="terms-of-service">
+      <p class="sec-tag">Legal</p>
+      <h2 class="sec-h">Terms of Service</h2>
+      <div class="terms-box">
+        <p class="terms-intro">
+          By using <strong id="apiNameTerms" style="color:var(--md-on-bg);font-family:var(--fd);"></strong>, you agree to the following:
+        </p>
+        <ul class="terms-list">
+          <li>Use APIs responsibly in compliance with all applicable laws and regulations.</li>
+          <li>Do not abuse the service or exceed established rate limits.</li>
+          <li>We reserve the right to modify or discontinue the service at any time.</li>
+          <li>API data and content are provided strictly for informational use.</li>
+          <li>We disclaim all liability for damages arising from API usage.</li>
+        </ul>
+        <p class="terms-note">
+          For full terms, contact us via our <a id="termsLink" href="#">Telegram channel</a>.
+        </p>
+      </div>
+    </section>
+
+    <div class="div"></div>
+
+    <!-- CTA -->
+    <section id="cta">
+      <div class="cta">
+        <div class="cta-body">
+          <div class="cta-live">
+            <div class="cta-pip"></div>
+            <span class="cta-live-txt">All systems operational</span>
+          </div>
+          <h2 class="cta-h">Start Building Today</h2>
+          <p class="cta-p">Join developers worldwide using our APIs. Instant access to robust endpoints backed by comprehensive documentation.</p>
+          <div class="btns" style="justify-content:flex-start;">
+            <a href="/docs" class="btn btn-fill md-ripple">
+              <i class="fas fa-terminal" style="font-size:11px;"></i>Open Documentation
             </a>
-            <a href="/docs" class="hdr-btn">Docs →</a>
+          </div>
         </div>
-    </header>
-
-    <!-- Main -->
-    <main>
-
-        <!-- ── HERO ───────────────────────────────────────── -->
-        <section class="hero">
-            <div class="badge">
-                <span class="badge-dot"></span>
-                <span id="headerStatus">API Platform</span>
-            </div>
-
-            <div class="hero-img-wrap" id="heroImgWrap">
-                <img id="headerImage" src="" alt="API" loading="eager">
-            </div>
-
-            <h1 class="hero-title">
-                Welcome to&nbsp;<span class="grad" id="apiName"></span>
-            </h1>
-            <p class="hero-sub" id="apiDescription"></p>
-
-            <div class="stats-chip">
-                <div class="stat">
-                    <span class="sv" id="totalEndpoints">—</span>
-                    <span class="sl">Endpoints</span>
-                </div>
-                <div class="stat">
-                    <span class="sv" id="totalCategories">—</span>
-                    <span class="sl">Categories</span>
-                </div>
-                <div class="stat">
-                    <span class="sv">Free</span>
-                    <span class="sl">Always</span>
-                </div>
-            </div>
-
-            <div class="btns">
-                <a href="/docs" class="btn btn-fill">
-                    <i class="fas fa-book-open" style="font-size:10px;"></i>
-                    View Docs
-                </a>
-                <a href="#features" class="btn btn-outline">Explore ↓</a>
-            </div>
-        </section>
-
-        <!-- ── FEATURES ───────────────────────────────────── -->
-        <section id="features">
-            <p class="sec-tag">Capabilities</p>
-            <h2 class="sec-h">Key Features</h2>
-            <div class="feat-grid stagger">
-                <div class="feat">
-                    <div class="feat-ico"><i class="fas fa-bolt"></i></div>
-                    <div class="feat-name">Lightning Fast</div>
-                    <p class="feat-body">Optimized endpoints with low-latency responses for seamless integration.</p>
-                </div>
-                <div class="feat">
-                    <div class="feat-ico"><i class="fas fa-unlock-alt"></i></div>
-                    <div class="feat-name">No Auth Required</div>
-                    <p class="feat-body">Instant access — no keys, no setup, zero overhead to get started.</p>
-                </div>
-                <div class="feat">
-                    <div class="feat-ico"><i class="fas fa-code"></i></div>
-                    <div class="feat-name">Clean JSON</div>
-                    <p class="feat-body">Standardized JSON outputs with detailed docs and practical examples.</p>
-                </div>
-            </div>
-        </section>
-
-        <div class="div"></div>
-
-        <!-- ── GETTING STARTED ────────────────────────────── -->
-        <section id="getting-started">
-            <p class="sec-tag">Quickstart</p>
-            <h2 class="sec-h">Getting Started</h2>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-n">1</div>
-                    <div>
-                        <div class="step-h">Select a Category</div>
-                        <p class="step-p">Browse API groups in the docs sidebar to find the right endpoint.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-n">2</div>
-                    <div>
-                        <div class="step-h">Review Documentation</div>
-                        <p class="step-p">Examine parameters, response shapes, and code examples for each endpoint.</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-n">3</div>
-                    <div>
-                        <div class="step-h">Implement & Integrate</div>
-                        <p class="step-p">Fire HTTP requests and plug JSON responses directly into your application.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="div"></div>
-
-        <!-- ── TERMS ──────────────────────────────────────── -->
-        <section id="terms-of-service">
-            <p class="sec-tag">Legal</p>
-            <h2 class="sec-h">Terms of Service</h2>
-            <div class="terms-box">
-                <p class="terms-intro">
-                    By using <strong id="apiNameTerms" style="color:var(--text-1);font-family:var(--fh);"></strong>, you agree to the following:
-                </p>
-                <ul class="terms-list">
-                    <li>Use APIs responsibly in compliance with all applicable laws and regulations.</li>
-                    <li>Do not abuse the service or exceed established rate limits.</li>
-                    <li>We reserve the right to modify or discontinue the service at any time.</li>
-                    <li>API data and content are provided strictly for informational use.</li>
-                    <li>We disclaim all liability for damages arising from API usage.</li>
-                </ul>
-                <p class="terms-note">
-                    For full terms, contact us via our <a id="termsLink" href="#">Telegram channel</a>.
-                </p>
-            </div>
-        </section>
-
-        <div class="div"></div>
-
-        <!-- ── CTA ────────────────────────────────────────── -->
-        <section id="cta">
-            <div class="cta">
-                <div class="cta-body">
-                    <div class="cta-live">
-                        <div class="cta-pip"></div>
-                        <span class="cta-live-txt">All systems operational</span>
-                    </div>
-                    <h2 class="cta-h">Start Building Today</h2>
-                    <p class="cta-p">Join developers worldwide using our APIs. Instant access to robust endpoints backed by comprehensive documentation.</p>
-                    <div class="btns" style="justify-content:flex-start;">
-                        <a href="/docs" class="btn btn-fill">
-                            <i class="fas fa-terminal" style="font-size:10px;"></i>
-                            Open Documentation
-                        </a>
-                    </div>
-                </div>
-                <div class="cta-pills">
-                    <div class="pill"><i class="fas fa-check-circle"></i>No Auth</div>
-                    <div class="pill"><i class="fas fa-check-circle"></i>100% Free</div>
-                    <div class="pill"><i class="fas fa-check-circle"></i>JSON Responses</div>
-                    <div class="pill"><i class="fas fa-check-circle"></i>Always Online</div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="ftr">
-            <div class="ftr-grid">
-                <div>
-                    <div class="ftr-h">About</div>
-                    <p class="ftr-p">An interactive API platform for seamless endpoint exploration and real-time integration testing.</p>
-                </div>
-                <div>
-                    <div class="ftr-h">Connect</div>
-                    <div class="soc-row">
-                        <a id="telegramLink"  href="#" target="_blank" rel="noopener" class="soc" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
-                        <a id="messengerLink" href="#" target="_blank" rel="noopener" class="soc" title="Messenger"><i class="fab fa-facebook-messenger"></i></a>
-                        <a id="githubLink"    href="#" target="_blank" rel="noopener" class="soc" title="GitHub"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="ftr-bottom">
-                <span class="ftr-copy" id="footerCopyright"></span>
-                <span class="ftr-tag">REST · JSON · FREE</span>
-            </div>
+        <div class="cta-pills">
+          <div class="pill"><i class="fas fa-check-circle"></i>No Auth</div>
+          <div class="pill"><i class="fas fa-check-circle"></i>100% Free</div>
+          <div class="pill"><i class="fas fa-check-circle"></i>JSON Responses</div>
+          <div class="pill"><i class="fas fa-check-circle"></i>Always Online</div>
         </div>
-    </footer>
+      </div>
+    </section>
+  </main>
 
-    <script>
-        /* ── Stagger on scroll ── */
-        const io = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-        }, { threshold: 0.08 });
-        document.querySelectorAll('.stagger').forEach(el => io.observe(el));
+  <footer>
+    <div class="ftr">
+      <div class="ftr-grid">
+        <div>
+          <div class="ftr-h">About</div>
+          <p class="ftr-p">An interactive API platform for seamless endpoint exploration and real-time integration testing.</p>
+        </div>
+        <div>
+          <div class="ftr-h">Connect</div>
+          <div class="soc-row">
+            <a id="telegramLink"  href="#" target="_blank" rel="noopener" class="soc" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+            <a id="messengerLink" href="#" target="_blank" rel="noopener" class="soc" title="Messenger"><i class="fab fa-facebook-messenger"></i></a>
+            <a id="githubLink"    href="#" target="_blank" rel="noopener" class="soc" title="GitHub"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="ftr-bottom">
+        <span class="ftr-copy" id="footerCopyright"></span>
+        <span class="ftr-tag">REST · JSON · FREE</span>
+      </div>
+    </div>
+  </footer>
 
-        /* ── Smooth anchor scroll ── */
-        document.querySelectorAll('a[href^="#"]').forEach(a => {
-            a.addEventListener('click', e => {
-                const t = document.querySelector(a.getAttribute('href'));
-                if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
-            });
-        });
+  <script>
+    /* ── Stagger on scroll ── */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.stagger').forEach(el => io.observe(el));
 
-        /* ── Apply imageSize from config.json to CSS custom properties ── */
-        function applyImageSize(imageSize) {
-            if (!imageSize) return;
-            const root = document.documentElement;
-            // Set CSS variables used by the responsive media queries
-            if (imageSize.mobile)  root.style.setProperty('--img-mobile',  imageSize.mobile);
-            if (imageSize.tablet)  root.style.setProperty('--img-tablet',  imageSize.tablet);
-            if (imageSize.desktop) root.style.setProperty('--img-desktop', imageSize.desktop);
-        }
+    /* ── Smooth anchor scroll ── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
 
-        /* ── Main bootstrap ── */
-        window.addEventListener('load', async () => {
-            const loader = document.getElementById('loader');
-            const mainEl = document.querySelector('main');
+    /* ── Apply imageSize ── */
+    function applyImageSize(imageSize) {
+      if (!imageSize) return;
+      const root = document.documentElement;
+      if (imageSize.mobile)  root.style.setProperty('--img-mobile',  imageSize.mobile);
+      if (imageSize.tablet)  root.style.setProperty('--img-tablet',  imageSize.tablet);
+      if (imageSize.desktop) root.style.setProperty('--img-desktop', imageSize.desktop);
+    }
 
-            try {
-                const [setRes, epRes] = await Promise.all([
-                    fetch('/set'),
-                    fetch('/endpoints')
-                ]);
-                const cfg = await setRes.json();
-                const { endpoints, count } = await epRes.json();
+    /* ── Bootstrap ── */
+    window.addEventListener('load', async () => {
+      const loader = document.getElementById('loader');
+      const mainEl = document.querySelector('main');
+      try {
+        const [setRes, epRes] = await Promise.all([fetch('/set'), fetch('/endpoints')]);
+        const cfg = await setRes.json();
+        const { endpoints, count } = await epRes.json();
 
-                /* Meta */
-                document.title = cfg.name;
-                document.querySelector('meta[name="description"]').content        = cfg.description;
-                document.querySelector('meta[property="og:title"]').content       = cfg.name;
-                document.querySelector('meta[property="og:description"]').content = cfg.description;
-                document.querySelector('link[rel="icon"]').href                   = cfg.icon;
+        document.title = cfg.name;
+        document.querySelector('meta[name="description"]').content        = cfg.description;
+        document.querySelector('meta[property="og:title"]').content       = cfg.name;
+        document.querySelector('meta[property="og:description"]').content = cfg.description;
+        document.querySelector('link[rel="icon"]').href                   = cfg.icon;
+        document.getElementById('headerTitle').textContent = cfg.name;
+        if (cfg.header?.status) document.getElementById('headerStatus').textContent = cfg.header.status;
 
-                /* Header */
-                document.getElementById('headerTitle').textContent = cfg.name;
+        const img = document.getElementById('headerImage');
+        img.src = Array.isArray(cfg.header.imageSrc) ? cfg.header.imageSrc[0] : (cfg.header.imageSrc || '');
+        img.alt = cfg.name;
+        if (cfg.header?.imageSize) applyImageSize(cfg.header.imageSize);
 
-                /* Hero — status badge from config.header.status */
-                if (cfg.header && cfg.header.status) {
-                    document.getElementById('headerStatus').textContent = cfg.header.status;
-                }
+        document.getElementById('apiName').textContent        = cfg.name;
+        document.getElementById('apiDescription').textContent = cfg.description;
+        document.getElementById('totalEndpoints').textContent  = count;
+        document.getElementById('totalCategories').textContent = endpoints.length;
+        document.getElementById('apiNameTerms').textContent = cfg.name;
 
-                /* Hero — image src from config.header.imageSrc (array) */
-                const img = document.getElementById('headerImage');
-                img.src = Array.isArray(cfg.header.imageSrc)
-                    ? cfg.header.imageSrc[0]
-                    : (cfg.header.imageSrc || '');
-                img.alt = cfg.name;
-
-                /* Hero — image size from config.header.imageSize */
-                if (cfg.header && cfg.header.imageSize) {
-                    applyImageSize(cfg.header.imageSize);
-                }
-
-                /* Hero copy */
-                document.getElementById('apiName').textContent        = cfg.name;
-                document.getElementById('apiDescription').textContent = cfg.description;
-
-                /* Stats */
-                document.getElementById('totalEndpoints').textContent  = count;
-                document.getElementById('totalCategories').textContent = endpoints.length;
-
-                /* Terms */
-                document.getElementById('apiNameTerms').textContent = cfg.name;
-                const tl = document.getElementById('termsLink');
-                if (tl && cfg.telegram) tl.href = cfg.telegram;
-
-                /* Footer */
-                document.getElementById('footerCopyright').textContent =
-                    `© ${new Date().getFullYear()} ${cfg.name}. All rights reserved.`;
-                if (cfg.telegram)  document.getElementById('telegramLink').href  = cfg.telegram;
-                if (cfg.messenger) document.getElementById('messengerLink').href = cfg.messenger;
-                if (cfg.github)    document.getElementById('githubLink').href    = cfg.github;
-
-            } catch (err) {
-                console.error('[gate] config load failed:', err);
-            } finally {
-                loader.classList.add('out');
-                mainEl.classList.add('show');
-            }
-        });
-    </script>
+        const tl = document.getElementById('termsLink');
+        if (tl && cfg.telegram) tl.href = cfg.telegram;
+        document.getElementById('footerCopyright').textContent = `© ${new Date().getFullYear()} ${cfg.name}. All rights reserved.`;
+        if (cfg.telegram)  document.getElementById('telegramLink').href  = cfg.telegram;
+        if (cfg.messenger) document.getElementById('messengerLink').href = cfg.messenger;
+        if (cfg.github)    document.getElementById('githubLink').href    = cfg.github;
+      } catch (err) { console.error('[gate] config load failed:', err); }
+      finally {
+        loader.classList.add('out');
+        mainEl.classList.add('show');
+      }
+    });
+  </script>
 </body>
 </html>
