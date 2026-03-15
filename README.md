@@ -31,7 +31,7 @@ A modular, self-documenting REST API built with **Node.js** and **Express**. Dro
 * ⚡ **Zero routing boilerplate** — export `meta` and `onStart`, the server handles everything else
 * 📦 **Automatic response envelope** — every JSON response gets `operator`, `timestamp`, and `responseTime` injected automatically
 * 🌐 **Interactive dashboard** — browse, search, and test every endpoint live from a built-in web UI
-* 🔀 **Multi-method support** — a single module can respond to `GET`, `POST`, `PUT`, `DELETE`, or any combination
+* 🔀 **Multi-method support** — a single module can respond to `GET`, `POST`, or combination
 * 🔔 **Notification system** — push messages to the dashboard in real time via a protected endpoint
 * 🗂️ **Category grouping** — endpoints are automatically grouped by category in the sidebar
 
@@ -39,24 +39,24 @@ A modular, self-documenting REST API built with **Node.js** and **Express**. Dro
 
 ## Project Structure
 
-```
 project-root/
+├── apis/
+│   ├── ai/                       # category folder
+│   ├── random/                   # category folder
+│   └── example.js                # API module (example)
 ├── core/
-│   ├── main.js                    # Express server — entry point
-│   ├── apis/                      # All API modules live here
-│   │   └── Example/
-│   │       └── example.js         # → registers as /example/example
-│   └── docs/                      # Dashboard and error pages (static)
-│       ├── docs.html              # Interactive API dashboard
-│       ├── gate.html              # Landing page
-│       └── err/
-│           ├── 404.html           # Not Found page
-│           └── 500.html           # Internal Server Error page
-└── json/
-    ├── config.json                # App-wide settings
-    └── notif.json                 # Notification store (auto-managed)
-```
-
+│   ├── docs/                     # Dashboard and error pages (static)
+│   │   ├── err/
+│   │   │   ├── 404.html          # Not Found page
+│   │   │   └── 500.html          # Internal Server Error page
+│   │   ├── docs.html             # Interactive API dashboard
+│   │   └── gate.html             # Landing page
+│   └── main.js                   # Express server — entry point
+├── json/
+│   ├── config.json               # App-wide settings
+│   └── notif.json                # Notification store (auto-managed)
+├── index.js                      # App bootstrap
+└── README.md
 ---
 
 ## Getting Started
