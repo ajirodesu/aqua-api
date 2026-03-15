@@ -8,32 +8,32 @@ A modular, self-documenting REST API built with **Node.js** and **Express**. Dro
 
 ## Table of Contents
 
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Configuration](#configuration)
-- [Creating API Modules](#creating-api-modules)
-- [Module Meta Reference](#module-meta-reference)
-- [Response Format](#response-format)
-- [Built-in Routes](#built-in-routes)
-- [Notification System](#notification-system)
-- [Dashboard](#dashboard)
-- [Error Pages](#error-pages)
-- [Logging](#logging)
-- [Environment Variables](#environment-variables)
+* [Features](#features)
+* [Project Structure](#project-structure)
+* [Getting Started](#getting-started)
+* [Configuration](#configuration)
+* [Creating API Modules](#creating-api-modules)
+* [Module Meta Reference](#module-meta-reference)
+* [Response Format](#response-format)
+* [Built-in Routes](#built-in-routes)
+* [Notification System](#notification-system)
+* [Dashboard](#dashboard)
+* [Error Pages](#error-pages)
+* [Logging](#logging)
+* [Environment Variables](#environment-variables)
 
 ---
 
 ## Features
 
-- 🆓 **Completely free** — no auth, no API keys, no rate limit paywalls
-- 🔌 **Auto-discovery** — modules in `core/apis/` are scanned and registered on startup, including all subdirectories
-- ⚡ **Zero routing boilerplate** — export `meta` and `onStart`, the server handles everything else
-- 📦 **Automatic response envelope** — every JSON response gets `operator`, `timestamp`, and `responseTime` injected automatically
-- 🌐 **Interactive dashboard** — browse, search, and test every endpoint live from a built-in web UI
-- 🔀 **Multi-method support** — a single module can respond to `GET`, `POST`, `PUT`, `DELETE`, or any combination
-- 🔔 **Notification system** — push messages to the dashboard in real time via a protected endpoint
-- 🗂️ **Category grouping** — endpoints are automatically grouped by category in the sidebar
+* 🆓 **Completely free** — no auth, no API keys, no rate limit paywalls
+* 🔌 **Auto-discovery** — modules in `core/apis/` are scanned and registered on startup, including all subdirectories
+* ⚡ **Zero routing boilerplate** — export `meta` and `onStart`, the server handles everything else
+* 📦 **Automatic response envelope** — every JSON response gets `operator`, `timestamp`, and `responseTime` injected automatically
+* 🌐 **Interactive dashboard** — browse, search, and test every endpoint live from a built-in web UI
+* 🔀 **Multi-method support** — a single module can respond to `GET`, `POST`, `PUT`, `DELETE`, or any combination
+* 🔔 **Notification system** — push messages to the dashboard in real time via a protected endpoint
+* 🗂️ **Category grouping** — endpoints are automatically grouped by category in the sidebar
 
 ---
 
@@ -124,15 +124,15 @@ Edit `json/config.json` to control global app behaviour:
 }
 ```
 
-| Field | Description |
-|---|---|
-| `name` | Displayed in the dashboard title and browser tab |
-| `description` | Shown in the dashboard hero section |
-| `operator` | Injected into every JSON response as `"operator"` |
-| `key` | Authorization token for the `POST /api/notification` endpoint |
-| `icon` | Favicon path served by the dashboard |
+| Field             | Description                                                    |
+| ----------------- | -------------------------------------------------------------- |
+| `name`            | Displayed in the dashboard title and browser tab               |
+| `description`     | Shown in the dashboard hero section                            |
+| `operator`        | Injected into every JSON response as `"operator"`              |
+| `key`             | Authorization token for the `POST /api/notification` endpoint  |
+| `icon`            | Favicon path served by the dashboard                           |
 | `header.imageSrc` | Hero image shown in the dashboard (string or array of strings) |
-| `header.status` | Status label shown next to the online indicator dot |
+| `header.status`   | Status label shown next to the online indicator dot            |
 
 ---
 
@@ -197,11 +197,13 @@ export async function onStart({ req, res }) {
 ```
 
 **GET request:**
+
 ```
 GET /example/example?text=Hello%2C+world!
 ```
 
 **POST request:**
+
 ```bash
 curl -X POST http://localhost:4000/example/example \
   -H "Content-Type: application/json" \
@@ -209,6 +211,7 @@ curl -X POST http://localhost:4000/example/example \
 ```
 
 **Response:**
+
 ```json
 {
   "operator": "AquaDesu",
@@ -296,33 +299,33 @@ The route path is built from two parts:
 1. **Category slug** — the `category` field in `meta`, lowercased with spaces replaced by `-`
 2. **File name** — the `.js` filename without the extension
 
-| File path | `category` | Registered route |
-|---|---|---|
-| `core/apis/Example/example.js` | `Example` | `/example/example` |
-| `core/apis/Image/generate.js` | `Image` | `/image/generate` |
-| `core/apis/tools/ping.js` | `tools` | `/tools/ping` |
+| File path                      | `category` | Registered route   |
+| ------------------------------ | ---------- | ------------------ |
+| `core/apis/Example/example.js` | `Example`  | `/example/example` |
+| `core/apis/Image/generate.js`  | `Image`    | `/image/generate`  |
+| `core/apis/tools/ping.js`      | `tools`    | `/tools/ping`      |
 
 ---
 
 ## Module Meta Reference
 
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `name` | `string` | ✓ | Display name shown in the dashboard sidebar |
-| `desc` | `string` | | Short description shown below the name |
-| `category` | `string` | | Groups the endpoint in the sidebar. Defaults to the parent directory name |
-| `method` | `string \| string[]` | | HTTP method(s). Defaults to `"GET"`. Case-insensitive |
-| `params` | `Param[]` | | Parameters shown and used in the dashboard tester |
+| Field      | Type                 | Required | Description                                                               |
+| ---------- | -------------------- | -------- | ------------------------------------------------------------------------- |
+| `name`     | `string`             | ✓        | Display name shown in the dashboard sidebar                               |
+| `desc`     | `string`             |          | Short description shown below the name                                    |
+| `category` | `string`             |          | Groups the endpoint in the sidebar. Defaults to the parent directory name |
+| `method`   | `string \| string[]` |          | HTTP method(s). Defaults to `"GET"`. Case-insensitive                     |
+| `params`   | `Param[]`            |          | Parameters shown and used in the dashboard tester                         |
 
 ### Param object
 
-| Field | Type | Description |
-|---|---|---|
-| `name` | `string` | Parameter key name |
-| `desc` | `string` | Description shown in the dashboard |
-| `example` | `any` | Placeholder / default value shown in the input field |
-| `required` | `boolean` | Marks the field as required in the UI |
-| `options` | `string[]` | If provided, renders a dropdown select instead of a text input |
+| Field      | Type       | Description                                                    |
+| ---------- | ---------- | -------------------------------------------------------------- |
+| `name`     | `string`   | Parameter key name                                             |
+| `desc`     | `string`   | Description shown in the dashboard                             |
+| `example`  | `any`      | Placeholder / default value shown in the input field           |
+| `required` | `boolean`  | Marks the field as required in the UI                          |
+| `options`  | `string[]` | If provided, renders a dropdown select instead of a text input |
 
 ---
 
@@ -339,10 +342,10 @@ Every `res.json()` call is automatically wrapped with metadata before being sent
 }
 ```
 
-| Field | Description |
-|---|---|
-| `operator` | Value of `config.operator` from `json/config.json` |
-| `timestamp` | ISO 8601 UTC timestamp of response generation |
+| Field          | Description                                                  |
+| -------------- | ------------------------------------------------------------ |
+| `operator`     | Value of `config.operator` from `json/config.json`           |
+| `timestamp`    | ISO 8601 UTC timestamp of response generation                |
 | `responseTime` | Time from request received to response sent, in milliseconds |
 
 ---
@@ -351,14 +354,13 @@ Every `res.json()` call is automatically wrapped with metadata before being sent
 
 These routes are registered by the server itself and are always available.
 
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/` | Serves the landing page |
-| `GET` | `/docs` | Serves the interactive API dashboard |
-| `GET` | `/endpoints` | Returns all registered endpoints as JSON |
-| `GET` | `/set` | Returns app config and current notifications |
-| `GET` | `/notifications` | Returns the current notification list |
-| `GET` | `/category/:category` | Serves the category hub page |
+| Method | Path                | Description                                                    |
+| ------ | ------------------- | -------------------------------------------------------------- |
+| `GET`  | `/`                 | Serves the landing page                                        |
+| `GET`  | `/docs`             | Serves the interactive API dashboard                           |
+| `GET`  | `/endpoints`        | Returns all registered endpoints as JSON                       |
+| `GET`  | `/set`              | Returns app config and current notifications                   |
+| `GET`  | `/notifications`    | Returns the current notification list                          |
 | `POST` | `/api/notification` | Push or clear a notification (requires `Authorization` header) |
 
 ### `GET /endpoints` response shape
@@ -402,6 +404,7 @@ curl -X POST http://localhost:4000/api/notification \
 ```
 
 **Response:**
+
 ```json
 {
   "operator": "AquaDesu",
@@ -422,11 +425,11 @@ curl -X POST http://localhost:4000/api/notification \
 
 ### Request body fields
 
-| Field | Type | Description |
-|---|---|---|
-| `message` | `string` | The notification body text |
-| `firstName` | `string` | Optional sender name — appears in the title as `From Developer <name>` |
-| `clear` | `boolean` | If `true`, deletes all existing notifications and ignores `message` |
+| Field       | Type      | Description                                                            |
+| ----------- | --------- | ---------------------------------------------------------------------- |
+| `message`   | `string`  | The notification body text                                             |
+| `firstName` | `string`  | Optional sender name — appears in the title as `From Developer <name>` |
+| `clear`     | `boolean` | If `true`, deletes all existing notifications and ignores `message`    |
 
 > **Authorization:** The `Authorization` header value must exactly match the `key` field in `json/config.json`. Requests with an invalid or missing key receive `401 Unauthorized`.
 
@@ -436,25 +439,25 @@ curl -X POST http://localhost:4000/api/notification \
 
 Accessible at `/docs`. Explore and test the entire API without any external tools.
 
-| Feature | Description |
-|---|---|
-| **Sidebar** | All categories and endpoints, with live search across names and descriptions |
-| **API Tester** | Fill in parameters and send live requests directly from the browser |
-| **Response viewer** | JSON with syntax highlighting; inline render for images, video, and audio responses |
-| **Download button** | Appears automatically when the response is a media or binary file |
-| **Base URL card** | One-click copy of the root API URL |
-| **Example endpoint** | A randomly selected live API shown on the home page each load |
-| **Response format card** | Documents the standard envelope fields |
-| **Error code reference** | HTTP status quick-reference (200, 400, 404, 429, 500) |
-| **Notifications panel** | Bell icon in the header shows messages pushed via the notification endpoint |
+| Feature                  | Description                                                                         |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| **Sidebar**              | All categories and endpoints, with live search across names and descriptions        |
+| **API Tester**           | Fill in parameters and send live requests directly from the browser                 |
+| **Response viewer**      | JSON with syntax highlighting; inline render for images, video, and audio responses |
+| **Download button**      | Appears automatically when the response is a media or binary file                   |
+| **Base URL card**        | One-click copy of the root API URL                                                  |
+| **Example endpoint**     | A randomly selected live API shown on the home page each load                       |
+| **Response format card** | Documents the standard envelope fields                                              |
+| **Error code reference** | HTTP status quick-reference (200, 400, 404, 429, 500)                               |
+| **Notifications panel**  | Bell icon in the header shows messages pushed via the notification endpoint         |
 
 ---
 
 ## Error Pages
 
-| File | Triggered when |
-|---|---|
-| `core/docs/err/404.html` | A request matches no registered route |
+| File                     | Triggered when                                          |
+| ------------------------ | ------------------------------------------------------- |
+| `core/docs/err/404.html` | A request matches no registered route                   |
 | `core/docs/err/500.html` | An unhandled exception occurs during request processing |
 
 Both pages automatically display the requested path, include navigation back to the dashboard, and share the full Aqua API design system.
@@ -465,21 +468,21 @@ Both pages automatically display the requested path, include navigation back to 
 
 All server events are printed to the console with colour-coded prefixes via `chalk`.
 
-| Prefix | Colour | When it appears |
-|---|---|---|
-| `• info` | Blue | General messages — scanning directories, server URLs |
-| `• ready` | Green | A route registered successfully, server started |
-| `• warn` | Yellow | Non-fatal issues — missing directory, skipped file |
-| `• error` | Red | Failed module load, unhandled request error |
-| `• event` | Cyan | Runtime events |
+| Prefix    | Colour | When it appears                                      |
+| --------- | ------ | ---------------------------------------------------- |
+| `• info`  | Blue   | General messages — scanning directories, server URLs |
+| `• ready` | Green  | A route registered successfully, server started      |
+| `• warn`  | Yellow | Non-fatal issues — missing directory, skipped file   |
+| `• error` | Red    | Failed module load, unhandled request error          |
+| `• event` | Cyan   | Runtime events                                       |
 
 ---
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `PORT` | `4000` | HTTP port the server listens on |
+| Variable | Default | Description                     |
+| -------- | ------- | ------------------------------- |
+| `PORT`   | `4000`  | HTTP port the server listens on |
 
 ```bash
 PORT=8080 node core/main.js

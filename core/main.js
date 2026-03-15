@@ -155,10 +155,6 @@ app.get('/endpoints', (req, res) => {
   res.json({ status: true, count: total, endpoints: allEndpoints });
 });
 
-app.get('/category/:category', (req, res) => {
-  res.sendFile(path.join(__dirname, 'docs', 'hub.html'));
-});
-
 app.get('/set', (req, res) => {
   const notifPath = path.join(rootDir, 'json', 'notif.json');
   let notifications = [];
