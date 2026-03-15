@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#050508">
   <title>Dashboard</title>
-  <link rel="icon" id="favicon" href="/docs/image/icon.png" type="image/png">
+<link rel="icon" id="favicon" href="/image/icon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -1209,7 +1209,7 @@ window.addEventListener('load',async()=>{
     const cfg=await sr.json(),epData=await er.json(),nfData=await nr.json();
     ALL=epData.endpoints||[];baseOrigin=window.location.origin;
     document.title=(cfg.name||'API')+' — Dashboard';
-    document.getElementById('favicon').href=cfg.icon||'/docs/image/icon.png';
+    document.getElementById('favicon').href=cfg.icon||'/image/icon.png';
     const img=document.getElementById('heroImg');
     img.src=Array.isArray(cfg.header.imageSrc)?cfg.header.imageSrc[0]:(cfg.header.imageSrc||'');img.alt=cfg.name;
     document.getElementById('heroName').textContent=cfg.name;

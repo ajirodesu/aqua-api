@@ -123,7 +123,7 @@ Edit `json/config.json` to control global app behaviour:
   "key": "your-secret-key",
   "icon": "/docs/image/icon.png",
   "header": {
-    "imageSrc": "/docs/image/banner.png",
+    "imageSrc": "/image/banner.png",
     "status": "Online"
   }
 }
