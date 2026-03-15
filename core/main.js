@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);   // ← core/ folder
 const rootDir = path.join(__dirname, '..');   // ← project root (home directory)
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 const logger = {
   info: (message) => console.log(chalk.dim.blue('•') + chalk.dim(' info  - ') + message),
@@ -179,7 +179,8 @@ app.get('/notifications', (req, res) => {
 });
 
 app.post('/api/notification', async (req, res) => {
-  if (req.headers.authorization !== `${config.key}`) {
+  const apiKey = process.env.API_KEY || config.key;
+  if (req.headers.authorization !== apiKey) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
