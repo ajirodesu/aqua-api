@@ -1,6 +1,6 @@
 # Aqua API
 
-A modular, self-documenting REST API built with **Node.js** and **Express**. Drop a `.js` file into `core/apis/` and it registers itself automatically — no routing boilerplate needed. Every response is wrapped with operator metadata, a timestamp, and response time. Ships with an interactive dashboard, live API tester, push notifications, and custom error pages.
+A modular, self-documenting REST API built with **Node.js** and **Express**. Drop a `.js` file into `apis/` and it registers itself automatically — no routing boilerplate needed. Every response is wrapped with operator metadata, a timestamp, and response time. Ships with an interactive dashboard, live API tester, push notifications, and custom error pages.
 
 > **100% Free** — No API key, no authentication, no payment required. All endpoints are open and ready to use.
 
@@ -27,7 +27,7 @@ A modular, self-documenting REST API built with **Node.js** and **Express**. Dro
 ## Features
 
 * 🆓 **Completely free** — no auth, no API keys, no rate limit paywalls
-* 🔌 **Auto-discovery** — modules in `core/apis/` are scanned and registered on startup, including all subdirectories
+* 🔌 **Auto-discovery** — modules in `apis/` are scanned and registered on startup, including all subdirectories
 * ⚡ **Zero routing boilerplate** — export `meta` and `onStart`, the server handles everything else
 * 📦 **Automatic response envelope** — every JSON response gets `operator`, `timestamp`, and `responseTime` injected automatically
 * 🌐 **Interactive dashboard** — browse, search, and test every endpoint live from a built-in web UI
@@ -39,6 +39,7 @@ A modular, self-documenting REST API built with **Node.js** and **Express**. Dro
 
 ## Project Structure
 
+```
 project-root/
 ├── apis/
 │   ├── ai/                       # category folder
@@ -57,6 +58,8 @@ project-root/
 │   └── notif.json                # Notification store (auto-managed)
 ├── index.js                      # App bootstrap
 └── README.md
+```
+
 ---
 
 ## Getting Started
@@ -66,7 +69,7 @@ project-root/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/aqua-api.git
+git clone https://github.com/ajirodesu/aqua-api.git
 cd aqua-api
 ```
 
@@ -83,7 +86,7 @@ Edit `json/config.json` with your project details — see [Configuration](#confi
 ### 4. Start the server
 
 ```bash
-node core/main.js
+node index.js
 ```
 
 The server starts on port `4000` by default. You'll see output like:
@@ -103,6 +106,8 @@ The server starts on port `4000` by default. You'll see output like:
 ### 5. Open the dashboard
 
 Navigate to [`http://localhost:4000/docs`](http://localhost:4000/docs) to browse and live-test all endpoints.
+
+> **Live demo:** [replit.com/@LanceAjiro/aqua-api-2](https://replit.com/@LanceAjiro/aqua-api-2)
 
 ---
 
@@ -138,7 +143,7 @@ Edit `json/config.json` to control global app behaviour:
 
 ## Creating API Modules
 
-Every `.js` file inside `core/apis/` that exports a `meta` object and an `onStart` function is automatically discovered and registered as an endpoint on startup.
+Every `.js` file inside `apis/` that exports a `meta` object and an `onStart` function is automatically discovered and registered as an endpoint on startup.
 
 ### Module format
 
@@ -152,7 +157,7 @@ export async function onStart({ req, res }) { /* ... */ }
 ### The built-in example endpoint
 
 ```js
-// core/apis/Example/example.js
+// apis/Example/example.js
 // Registers as: GET /example/example  and  POST /example/example
 
 export const meta = {
@@ -224,7 +229,7 @@ curl -X POST http://localhost:4000/example/example \
 ### Minimal GET module
 
 ```js
-// core/apis/greet/hello.js
+// apis/greet/hello.js
 // Registers as: GET /greet/hello
 
 export const meta = {
@@ -251,7 +256,7 @@ export async function onStart({ req, res }) {
 ### Multi-method module
 
 ```js
-// core/apis/tools/ping.js
+// apis/tools/ping.js
 // Responds to GET and POST /tools/ping
 
 export const meta = {
@@ -299,11 +304,11 @@ The route path is built from two parts:
 1. **Category slug** — the `category` field in `meta`, lowercased with spaces replaced by `-`
 2. **File name** — the `.js` filename without the extension
 
-| File path                      | `category` | Registered route   |
-| ------------------------------ | ---------- | ------------------ |
-| `core/apis/Example/example.js` | `Example`  | `/example/example` |
-| `core/apis/Image/generate.js`  | `Image`    | `/image/generate`  |
-| `core/apis/tools/ping.js`      | `tools`    | `/tools/ping`      |
+| File path                  | `category` | Registered route   |
+| -------------------------- | ---------- | ------------------ |
+| `apis/Example/example.js`  | `Example`  | `/example/example` |
+| `apis/Image/generate.js`   | `Image`    | `/image/generate`  |
+| `apis/tools/ping.js`       | `tools`    | `/tools/ping`      |
 
 ---
 
@@ -485,7 +490,7 @@ All server events are printed to the console with colour-coded prefixes via `cha
 | `PORT`   | `4000`  | HTTP port the server listens on |
 
 ```bash
-PORT=8080 node core/main.js
+PORT=8080 node index.js
 ```
 
 ---
