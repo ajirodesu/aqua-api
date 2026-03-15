@@ -1,5 +1,5 @@
-// core/apis/ChatGPTFree/chatgptfree.js
-// ← Place this file exactly here (inside core/apis/)
+// apis/ChatGPTFree/chatgptfree.js
+// ← Place this file exactly here (inside apis/)
 
 import axios from 'axios';
 

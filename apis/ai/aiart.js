@@ -1,4 +1,4 @@
-// core/apis/AIArt/aiart.js
+// apis/AIArt/aiart.js
 // ESM version of the original aiart.js
 
 import WebSocket from 'ws';

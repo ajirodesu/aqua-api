@@ -1,4 +1,4 @@
-// core/apis/Venice/venice.js
+// apis/Venice/venice.js
 import axios from 'axios';
 
 export const meta = {

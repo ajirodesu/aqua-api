@@ -1,5 +1,5 @@
-// core/apis/Example/example.js
-// ← Place this file exactly here (inside core/apis/)
+// apis/Example/example.js
+// ← Place this file exactly here (inside apis/)
 
 export const meta = {
   name: 'example',

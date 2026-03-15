@@ -1,4 +1,4 @@
-// core/apis/WebPilot/webpilot.js
+// apis/WebPilot/webpilot.js
 import axios from "axios";
 
 export const meta = {

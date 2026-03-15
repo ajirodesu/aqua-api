@@ -1,4 +1,4 @@
-// core/apis/Goody/goody.js
+// apis/Goody/goody.js
 import axios from 'axios';
 
 export const meta = {
