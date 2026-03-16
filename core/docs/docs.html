@@ -13,12 +13,11 @@
   <style>
     /* ── RESET ── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    /* Kill ALL browser blue / default focus rings globally */
     *, *:focus { outline: none; -webkit-tap-highlight-color: transparent; }
     a, button { -webkit-tap-highlight-color: transparent; }
     ::selection { background: rgba(251,191,36,0.24); color: #e8e8f2; }
 
-    /* ── DESIGN TOKENS — unified with index.html ── */
+    /* ── DESIGN TOKENS ── */
     :root {
       --md-bg:        #0a0a0f;
       --md-surf-1:    #12121a;
@@ -101,7 +100,7 @@
     }
     .md-state:hover::after { opacity: 1; }
 
-    /* ── HEADER — MD3 Top App Bar ── */
+    /* ── HEADER ── */
     #hdr {
       position: fixed; top: 0; left: 0; right: 0; z-index: 600; height: var(--HH);
       background: rgba(10,10,15,0.92);
@@ -112,8 +111,6 @@
     .hdr-inner { height: 100%; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .hdr-left, .hdr-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .hdr-mid { font-family: var(--fd); font-size: 15px; font-weight: 700; color: var(--md-on-bg); letter-spacing: -.01em; flex: 1; text-align: center; }
-
-    /* MD3 Icon button */
     .hico {
       width: 40px; height: 40px; border-radius: var(--md-shape-full);
       border: none; background: transparent;
@@ -143,7 +140,7 @@
     }
     #sbo.on { opacity: 1; visibility: visible; }
 
-    /* ── SIDEBAR — MD3 Navigation Drawer ── */
+    /* ── SIDEBAR ── */
     #sb {
       position: fixed; top: 0; left: 0; bottom: 0; z-index: 800;
       width: var(--SBW); max-width: 88vw;
@@ -153,7 +150,6 @@
       box-shadow: 2px 0 32px rgba(0,0,0,0.6), inset -1px 0 0 rgba(251,191,36,0.04);
       display: flex; flex-direction: column;
       transform: translateX(-100%);
-      /* Use will-change to eliminate stutter on open */
       will-change: transform;
       transition: transform var(--md-dur-l) var(--md-ease-e);
       overflow: hidden;
@@ -169,7 +165,6 @@
     }
     .sb-title { font-family: var(--fd); font-size: 14px; font-weight: 700; color: var(--md-on-bg); flex: 1; }
     .sb-hbtns { display: flex; gap: 4px; flex-shrink: 0; }
-    /* MD3 Icon button — small */
     .sbtn {
       width: 36px; height: 36px; border-radius: var(--md-shape-full);
       border: none; background: transparent;
@@ -188,7 +183,6 @@
       background: rgba(255,255,255,0.02);
     }
     #sb-hdr-search.on { display: flex; }
-    /* MD3 Search bar */
     .sb-search-box {
       flex: 1; display: flex; align-items: center; gap: 10px;
       background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
@@ -206,7 +200,7 @@
     .sb-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
     .sb-list.frozen { overflow: hidden; }
 
-    /* Category blocks */
+    /* Category blocks — original structure + icon */
     .cat-block { border-bottom: 1px solid rgba(255,255,255,0.04); }
     .cat-block:last-child { border-bottom: none; }
     .cat-row {
@@ -216,6 +210,13 @@
     }
     .cat-row:hover { background: rgba(255,255,255,0.04); }
     .cat-left { display: flex; align-items: center; gap: 10px; }
+
+    /* Category icon — inline, no bubble, no glow */
+    .cat-icon {
+      font-size: 13px; flex-shrink: 0; width: 16px; text-align: center;
+      transition: color var(--md-dur-m);
+    }
+
     .cat-name { font-family: var(--fh); font-size: 13px; font-weight: 600; color: var(--md-on-bg); text-transform: capitalize; }
     .cat-cnt {
       font-family: var(--fm); font-size: 9px; color: var(--md-on-surf-d);
@@ -226,11 +227,12 @@
     .cat-block.open .cat-arrow { transform: rotate(90deg); color: var(--md-pri); }
     .cat-block.open .cat-row { background: rgba(251,191,36,0.04); }
     .cat-block.open .cat-name { color: var(--md-pri); }
+    .cat-block.open .cat-icon { color: var(--md-pri); }
 
     .cat-items { max-height: 0; overflow: hidden; transition: max-height var(--md-dur-l) var(--md-ease-e); }
     .cat-block.open .cat-items { max-height: 9999px; }
 
-    /* MD3 Navigation list item */
+    /* API rows — original */
     .api-row {
       display: flex; align-items: center; gap: 10px;
       padding: 9px 16px 9px 24px; cursor: pointer;
@@ -251,12 +253,12 @@
     .api-info { flex: 1; min-width: 0; }
     .api-name  { font-family: var(--fh); font-size: 12px; font-weight: 600; color: var(--md-on-bg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .api-desc  { font-family: var(--fh); font-size: 11px; color: var(--md-on-surf-d); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
-    .sb-empty  { padding: 36px 16px; text-align: center; }
-    .sb-empty i { display: block; font-size: 22px; color: var(--md-on-surf-d); margin-bottom: 10px; }
+    .sb-empty  { padding: 40px 16px; text-align: center; }
+    .sb-empty i { display: block; font-size: 24px; color: var(--md-on-surf-d); margin-bottom: 12px; }
     .sb-empty span { font-size: 12px; color: var(--md-on-surf-d); }
 
     /* ═══════════════════════════════════
-       NOTIFICATION PANEL — MD3 Menu
+       NOTIFICATION PANEL
     ═══════════════════════════════════ */
     #np {
       position: fixed; top: calc(var(--HH) + 8px); right: 14px;
@@ -277,8 +279,6 @@
       background: linear-gradient(90deg, transparent, rgba(251,191,36,0.35), transparent);
       pointer-events: none; z-index: 1;
     }
-
-    /* NP Header */
     .np-hdr {
       padding: 14px 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.055);
       display: flex; align-items: center; gap: 10px; flex-shrink: 0;
@@ -288,7 +288,6 @@
     .np-title { font-family: var(--fd); font-size: 14px; font-weight: 700; color: var(--md-on-bg); }
     .np-subtitle { font-family: var(--fh); font-size: 10px; color: var(--md-on-surf-d); margin-top: 1px; }
     .np-hdr-actions { display: flex; gap: 6px; flex-shrink: 0; }
-    /* MD3 Text button */
     .np-mar-btn {
       display: flex; align-items: center; gap: 6px;
       font-family: var(--fh); font-size: 11px; font-weight: 500;
@@ -299,16 +298,12 @@
     }
     .np-mar-btn:hover:not(:disabled) { background: var(--md-pri-10); }
     .np-mar-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
     .np-list { flex: 1; overflow-y: auto; padding: 8px; min-height: 0; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
     .np-list::-webkit-scrollbar { width: 3px; }
     .np-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-
     .np-empty { padding: 32px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .np-empty-ico { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--md-on-surf-d); }
     .np-empty span { font-size: 12px; color: var(--md-on-surf-d); }
-
-    /* NP Item — MD3 List Item */
     .np-item {
       border: 1px solid rgba(255,255,255,0.065); border-radius: var(--md-shape-l);
       margin-bottom: 6px; overflow: hidden; position: relative;
@@ -355,8 +350,6 @@
       margin-top: -2px;
     }
     .np-dismiss:hover { background: rgba(248,113,113,0.12); color: var(--md-err); }
-
-    /* NP Quick Tester */
     .np-toggle-tester {
       display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 12px;
       background: transparent; border: none; border-top: 1px solid rgba(255,255,255,0.05);
@@ -386,7 +379,6 @@
     .np-preq { font-size: 9px; color: var(--md-err); text-transform: uppercase; letter-spacing: .1em; }
     .np-popt { font-size: 9px; color: var(--md-on-surf-d); text-transform: uppercase; letter-spacing: .1em; }
     .np-param-desc { font-family: var(--fh); font-size: 10px; color: var(--md-on-surf-d); margin-bottom: 4px; line-height: 1.5; }
-    /* MD3 Filled text field */
     .np-pinp {
       width: 100%; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.09);
       border-radius: var(--md-shape-s); padding: 8px 10px;
@@ -397,7 +389,6 @@
     .np-pinp:focus { border-color: rgba(251,191,36,0.5); background: rgba(0,0,0,0.35); }
     .np-pinp::placeholder { color: var(--md-on-surf-d); }
     .np-tester-actions { display: flex; gap: 6px; margin-top: 10px; }
-    /* MD3 Filled button */
     .np-try-btn {
       flex: 1; padding: 9px; border-radius: var(--md-shape-full);
       background: linear-gradient(135deg, var(--md-pri), var(--md-sec));
@@ -409,7 +400,6 @@
     .np-try-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(251,191,36,0.25); }
     .np-try-btn:active { transform: translateY(0); }
     .np-try-btn:disabled { opacity: .4; cursor: not-allowed; }
-    /* MD3 Tonal button */
     .np-open-tester-btn {
       padding: 9px 12px; border-radius: var(--md-shape-full);
       background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
@@ -428,7 +418,6 @@
     .np-res-status { font-family: var(--fd); font-size: 11px; font-weight: 700; }
     .np-res-time { font-family: var(--fm); font-size: 10px; color: var(--md-on-surf-d); }
     .np-res-preview { font-family: var(--fm); font-size: 10px; color: var(--md-on-surf); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
-
     .np-footer { flex-shrink: 0; padding: 8px; border-top: 1px solid rgba(255,255,255,0.04); background: rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
     .np-footer-txt { font-family: var(--fh); font-size: 10px; color: var(--md-on-surf-d); letter-spacing: .04em; }
 
@@ -436,11 +425,9 @@
     #page {
       position: relative; z-index: 1; max-width: 800px; margin: 0 auto;
       padding: calc(var(--HH) + 28px) 24px 88px;
-      /* Visible by default so refresh never shows a blank page */
       opacity: 1; transform: translateY(0);
       transition: none;
     }
-    /* Animate in only when JS bootstraps successfully */
     #page.animate-in {
       animation: page-fadein var(--md-dur-xl) var(--md-ease-e) both;
     }
@@ -470,7 +457,6 @@
     /* Stats grid */
     .stats-row { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-bottom: 24px; }
     @media(min-width:520px) { .stats-row { grid-template-columns: repeat(4,1fr); } }
-    /* MD3 Card */
     .scard {
       background: var(--md-surf-1); border: 1px solid var(--md-out);
       border-radius: var(--md-shape-l); padding: 18px; display: flex; flex-direction: column; gap: 6px;
@@ -520,7 +506,6 @@
       color: var(--md-on-surf); overflow-x: auto; position: relative;
     }
     .ck{color:#93c5fd;}.cs{color:#86efac;}.cv{color:#fca5a5;}.cm{color:var(--md-on-surf-d);}
-    /* MD3 Text button */
     .cbtn {
       position: absolute; top: 8px; right: 8px;
       background: var(--md-surf-3); border: 1px solid var(--md-out-var); border-radius: var(--md-shape-s);
@@ -538,10 +523,7 @@
     .e5{background:rgba(248,113,113,0.1);color:var(--md-err);}
     .emsg{color:var(--md-on-surf);}.edsc{color:var(--md-on-surf-d);font-size:11px;}
 
-    /* ═══════════════════════════════════
-       MODAL — MD3 Full-screen Dialog
-       will-change + translateZ(0) = no-lag
-    ═══════════════════════════════════ */
+    /* ── MODAL ── */
     #mo {
       position: fixed; inset: 0; z-index: 900;
       background: rgba(0,0,0,0.7);
@@ -549,9 +531,7 @@
       display: flex; align-items: center; justify-content: center; padding: 16px;
       opacity: 0; visibility: hidden;
       transition: opacity var(--md-dur-m) var(--md-ease), visibility var(--md-dur-m);
-      /* GPU layer for no-lag */
-      will-change: opacity;
-      transform: translateZ(0);
+      will-change: opacity; transform: translateZ(0);
     }
     #mo.on { opacity: 1; visibility: visible; }
     #modal {
@@ -560,25 +540,20 @@
       border-radius: var(--md-shape-xl); overflow: hidden;
       display: flex; flex-direction: column;
       box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 24px 80px rgba(0,0,0,0.7);
-      /* Critical: promote to compositor layer immediately — eliminates open/close stutter */
       transform: translateY(16px) translateZ(0) scale(0.98);
       will-change: transform;
       transition: transform var(--md-dur-l) var(--md-ease-e);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
     }
     #mo.on #modal { transform: translateY(0) translateZ(0) scale(1); }
     @media(max-width:600px) {
       #mo { padding: 8px; }
       #modal { height: calc(100dvh - 16px); min-height: 300px; border-radius: var(--md-shape-xl); }
     }
-
-    /* Modal header */
     .mhdr { padding: 16px 18px; border-bottom: 1px solid var(--md-out); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-shrink: 0; }
     .mhdr-info { flex: 1; min-width: 0; }
     .mh-name { font-family: var(--fd); font-size: 15px; font-weight: 700; color: var(--md-on-bg); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .mh-desc { font-family: var(--fh); font-size: 11px; color: var(--md-on-surf); line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    /* MD3 Icon button */
     .mh-x {
       width: 32px; height: 32px; flex-shrink: 0; border-radius: var(--md-shape-full);
       border: none; background: transparent;
@@ -587,19 +562,14 @@
       transition: background var(--md-dur-m), color var(--md-dur-m);
     }
     .mh-x:hover { background: rgba(248,113,113,0.12); color: var(--md-err); }
-
-    /* Modal body */
     .mbody { flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 0; padding: 18px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
     .mbody::-webkit-scrollbar { width: 3px; }
     .mbody::-webkit-scrollbar-thumb { background: var(--md-out-var); border-radius: 3px; }
-
-    /* Endpoint block */
     .ep-block { background: var(--md-surf-2); border: 1px solid var(--md-out-var); border-radius: var(--md-shape-l); overflow: hidden; margin-bottom: 20px; }
     .ep-top { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--md-out); flex-wrap: wrap; gap: 8px; }
     .ep-badge { font-family: var(--fm); font-size: 9px; font-weight: 700; padding: 3px 10px; border-radius: var(--md-shape-xs); text-transform: uppercase; letter-spacing: .06em; flex-shrink: 0; }
     .ep-url-txt { font-family: var(--fm); font-size: 11px; color: var(--md-on-bg); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .ep-acts { display: flex; gap: 6px; flex-shrink: 0; }
-    /* MD3 Outlined button — small */
     .epbtn {
       display: flex; align-items: center; gap: 5px;
       font-family: var(--fh); font-size: 11px; font-weight: 500;
@@ -615,11 +585,8 @@
     .curl-cmd { flex: 1; font-family: var(--fm); font-size: 11px; color: var(--md-on-surf); line-height: 1.6; word-break: break-all; }
     .curl-cp { flex-shrink: 0; background: none; border: none; cursor: pointer; color: var(--md-on-surf-d); font-size: 13px; padding: 2px 4px; transition: color var(--md-dur-m); border-radius: var(--md-shape-xs); }
     .curl-cp:hover { color: var(--md-pri); }
-
-    /* Params / tabs */
     .mlbl { font-family: var(--fh); font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--md-on-surf-d); margin-bottom: 10px; }
     .mtabs { display: flex; gap: 6px; margin-bottom: 16px; }
-    /* MD3 Filter chips */
     .mtab {
       font-family: var(--fh); font-size: 12px; font-weight: 500;
       padding: 6px 16px; border-radius: var(--md-shape-full);
@@ -628,13 +595,11 @@
     }
     .mtab.on { background: var(--md-pri-10); border-color: rgba(251,191,36,0.4); color: var(--md-pri); }
     .mtab:hover:not(.on) { background: rgba(255,255,255,0.04); color: var(--md-on-surf); }
-
     .prow { margin-bottom: 12px; }
     .pname { font-family: var(--fh); font-size: 12px; color: var(--md-on-surf); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
     .preq { font-size: 9px; color: var(--md-err); text-transform: uppercase; letter-spacing: .1em; }
     .popt { font-size: 9px; color: var(--md-on-surf-d); text-transform: uppercase; letter-spacing: .1em; }
     .pdsc { font-family: var(--fh); font-size: 11px; color: var(--md-on-surf-d); margin-bottom: 5px; line-height: 1.5; }
-    /* MD3 Filled text field */
     .pinp {
       width: 100%; background: var(--md-surf-2); border: 1px solid var(--md-out-var);
       border-radius: var(--md-shape-s); padding: 9px 12px;
@@ -652,7 +617,6 @@
       transition: border-color var(--md-dur-m), background var(--md-dur-m);
     }
     .jbody-ta:focus { border-color: rgba(251,191,36,0.5); background: var(--md-surf-3); }
-    /* MD3 Filled button — run */
     .run-btn {
       width: 100%; margin-top: 16px; padding: 12px;
       border-radius: var(--md-shape-full);
@@ -665,8 +629,6 @@
     .run-btn:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(251,191,36,0.28); }
     .run-btn:active { transform: translateY(0); }
     .run-btn:disabled { opacity: .4; cursor: not-allowed; transform: none !important; }
-
-    /* Response */
     .res-wrap { margin-top: 20px; }
     .res-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
     .res-lbl { font-family: var(--fh); font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--md-on-surf-d); }
@@ -692,7 +654,7 @@
     .res-dl-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: var(--md-shape-full); background: var(--md-surf-3); border: 1px solid var(--md-out-var); font-family: var(--fh); font-size: 12px; color: var(--md-on-surf); cursor: pointer; text-decoration: none; transition: border-color var(--md-dur-m), color var(--md-dur-m); }
     .res-dl-btn:hover { border-color: rgba(251,191,36,0.4); color: var(--md-pri); }
 
-    /* ── TOAST — MD3 Snackbar ── */
+    /* ── TOAST ── */
     #toast {
       position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(16px);
       background: var(--md-surf-2); border: 1px solid var(--md-out-var);
@@ -705,7 +667,6 @@
     }
     #toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--md-out-var); border-radius: 4px; }
@@ -778,7 +739,6 @@
   </div>
 
   <div id="page">
-    <!-- HERO -->
     <div class="dhero">
       <div class="dh-img"><img id="heroImg" src="" alt="API"></div>
       <div class="dh-info">
@@ -788,7 +748,6 @@
       </div>
     </div>
 
-    <!-- STATS -->
     <div class="stats-row">
       <div class="scard"><span class="sc-ico"><i class="fas fa-plug"></i></span><span class="sc-val" id="sc-apis">—</span><span class="sc-lbl">Total APIs</span></div>
       <div class="scard"><span class="sc-ico"><i class="fas fa-layer-group"></i></span><span class="sc-val" id="sc-cats">—</span><span class="sc-lbl">Categories</span></div>
@@ -798,7 +757,6 @@
 
     <div class="divl"></div>
 
-    <!-- INFO CARDS -->
     <div class="igrid">
       <div class="icard">
         <div class="ic-hd"><div class="ic-ico"><i class="fas fa-globe"></i></div><div><div class="ic-title">Base URL</div><div class="ic-sub">Root for all API calls</div></div></div>
@@ -897,13 +855,855 @@
   <div id="toast"><i id="toast-ico" class="fas fa-check" style="font-size:11px;color:var(--md-ter);"></i><span id="toast-txt"></span></div>
 
   <script>
+    /* ═══════════════════════════════════════════════════════════
+       ICON ENGINE v3
+       Three-tier matching — word-boundary safe, zero false positives.
+
+       HOW IT WORKS
+       ────────────
+       Tier 1 · PHRASE  — multi-word substrings (≥5 chars, sorted longest-first
+                          so "machine learning" beats "learning").
+       Tier 2 · TOKEN   — exact whole-word match on the Set of space-split tokens
+                          (safe: "art" only fires when the name IS "art", never
+                           inside "smart" / "cart" / "start").
+       Tier 3 · PREFIX  — first token prefix for very short / abbreviated names.
+       Final  · HASH    — deterministic pick from a curated real-icon pool.
+
+       Each rule: { p: phrases[], t: tokens[], i: icon }
+    ═══════════════════════════════════════════════════════════ */
+
+    const ICON_RULES = [
+      /* ── Weather & Atmosphere ── */
+      { p:['air quality index','air quality','weather forecast','current weather'],
+        t:['weather','forecast','precipitation','meteorology','meteorological','atmospheric','humidity','rainfall','snowfall','hurricane','typhoon','tornado','storm','climate'],
+        i:'fa-cloud-sun' },
+      { p:['air quality','wind speed','uv index'],
+        t:['aqi','pollen','allergen','smog','pollution'],
+        i:'fa-wind' },
+
+      /* ── Artificial Intelligence & ML ── */
+      { p:['machine learning','deep learning','neural network','artificial intelligence','natural language processing','large language model','generative ai','computer vision','image recognition','object detection','optical character recognition','stable diffusion','reinforcement learning'],
+        t:['llm','nlp','bert','gpt','gemini','mistral','llama','chatgpt','openai','claude','diffusion','transformer','embedding','inference','generative'],
+        i:'fa-robot' },
+      { p:['computer vision','image recognition','object detection'],
+        t:['ocr'],
+        i:'fa-eye' },
+      { p:['ai tools','ai api','ai service'],
+        t:['ai','ml'],
+        i:'fa-robot' },
+
+      /* ── Anime & Manga ── */
+      { p:['anime streaming','anime database','manga reader','webtoon'],
+        t:['anime','manga','webtoon','crunchyroll','funimation','anilist','otaku'],
+        i:'fa-tv' },
+
+      /* ── Sports (specific sports first) ── */
+      { p:['premier league','champions league','world cup','la liga','bundesliga','serie a','mls','major league'],
+        t:['football','soccer','nfl','fifa','futbol'],
+        i:'fa-futbol' },
+      { p:['nba','ncaa basketball'],
+        t:['basketball'],
+        i:'fa-basketball' },
+      { p:['mlb','major league baseball'],
+        t:['baseball'],
+        i:'fa-baseball' },
+      { p:['wimbledon','grand slam'],
+        t:['tennis'],
+        i:'fa-table-tennis-paddle-ball' },
+      { p:['pga tour','golf handicap'],
+        t:['golf'],
+        i:'fa-golf-ball-tee' },
+      { p:['ice hockey','nhl'],
+        t:['hockey'],
+        i:'fa-hockey-puck' },
+      { p:['cricket match','ipl cricket'],
+        t:['cricket'],
+        i:'fa-cricket-bat-ball' },
+      { p:['formula 1','motogp','pit stop','lap time'],
+        t:['racing','nascar','motorsport'],
+        i:'fa-flag-checkered' },
+      { p:['esports','competitive gaming','gaming tournament'],
+        t:['esports'],
+        i:'fa-gamepad' },
+      { p:['world championship','olympic','paralympic'],
+        t:['olympic','medal','athletics'],
+        i:'fa-medal' },
+      { p:['mixed martial arts'],
+        t:['boxing','mma','ufc','wrestling'],
+        i:'fa-hand-fist' },
+      { p:['triathlon','marathon run'],
+        t:['swimming','cycling','triathlon','marathon','running'],
+        i:'fa-person-running' },
+      { p:['sports stats','sports data','sports api','live scores','match results','game results','sports scores','sport stats'],
+        t:['sports','sport','athlete','league','standings','fixture'],
+        i:'fa-trophy' },
+
+      /* ── Cryptocurrency & Blockchain ── */
+      { p:['cryptocurrency','blockchain','decentralized finance','non-fungible token','web3','smart contract'],
+        t:['crypto','bitcoin','btc','ethereum','eth','defi','nft','solana','cardano','polygon','binance','coinbase','altcoin','stablecoin','dao','token'],
+        i:'fa-coins' },
+
+      /* ── Finance & Banking ── */
+      { p:['stock market','stock price','mutual fund','hedge fund','market cap','index fund','interest rate','credit score','exchange rate'],
+        t:['stocks','equity','nasdaq','nyse','ipo','etf','dividend','forex'],
+        i:'fa-chart-line' },
+      { p:['payment gateway','online payment','mobile payment','bank transfer'],
+        t:['payment','payments','banking','bank','invoice','billing','wallet','stripe','paypal','visa','mastercard','finance','financial'],
+        i:'fa-credit-card' },
+      { p:['currency exchange','foreign exchange'],
+        t:['currency','usd','eur','gbp','jpy'],
+        i:'fa-money-bill-wave' },
+      { p:['mortgage rate','credit score','insurance premium'],
+        t:['mortgage','insurance','loan'],
+        i:'fa-hand-holding-dollar' },
+
+      /* ── News & Media ── */
+      { p:['breaking news','news feed','news api','latest news','top headlines'],
+        t:['news','headlines','journalism','press','reporter','media','article','articles','blog'],
+        i:'fa-newspaper' },
+
+      /* ── Music ── */
+      { p:['music streaming','music lyrics','song lyrics','music api','music search','music data'],
+        t:['music','song','songs','track','tracks','album','albums','artist','artists','playlist','lyrics','spotify','bpm','chord'],
+        i:'fa-music' },
+
+      /* ── Movies & Film ── */
+      { p:['movie database','movie api','film database','box office','movie search','movie info'],
+        t:['movie','movies','film','films','cinema','imdb','tmdb','hollywood'],
+        i:'fa-film' },
+
+      /* ── TV & Streaming ── */
+      { p:['tv show','tv series','streaming service','video on demand'],
+        t:['television','series','episode','episodes','netflix','hulu','hbo','disney'],
+        i:'fa-tv' },
+
+      /* ── Books & Literature ── */
+      { p:['book search','ebook','open library','google books'],
+        t:['books','book','library','literature','reading','ebook','kindle','goodreads','isbn','gutenberg'],
+        i:'fa-book' },
+
+      /* ── Games & Gaming ── */
+      { p:['video game','board game','card game','game data','game api','gaming api'],
+        t:['game','games','gaming','arcade','puzzle','rpg','fps','mmo','steam','xbox','playstation','nintendo'],
+        i:'fa-gamepad' },
+
+      /* ── Images & Photography ── */
+      { p:['image processing','image generation','image search','stock photo','photo api','image api'],
+        t:['images','image','photos','photo','photography','picture','pictures','unsplash','pexels','pixabay'],
+        i:'fa-image' },
+
+      /* ── Video ── */
+      { p:['video streaming','video api','live video','video search','short video'],
+        t:['video','videos','streaming','youtube','vimeo','vod'],
+        i:'fa-circle-play' },
+
+      /* ── Podcasts ── */
+      { p:['podcast api','podcast data','podcast search'],
+        t:['podcast','podcasts'],
+        i:'fa-podcast' },
+
+      /* ── Radio ── */
+      { p:['radio station','radio stream','internet radio'],
+        t:['radio'],
+        i:'fa-radio' },
+
+      /* ── Comics & Manga ── */
+      { p:['comic book','superhero','marvel','dc comics'],
+        t:['comics','comic','manga','webtoon','superhero'],
+        i:'fa-book-open' },
+
+      /* ── Art & Design ── */
+      { p:['digital art','art gallery','design api','color palette','painting'],
+        t:['artwork','gallery','museum','illustration','creative','canvas','palette'],
+        i:'fa-palette' },
+
+      /* ── Translation & Language ── */
+      { p:['language translation','machine translation','text translation','translate api','language detection'],
+        t:['translation','translate','localization','localize','multilingual','deepl'],
+        i:'fa-language' },
+
+      /* ── Dictionary & Vocabulary ── */
+      { p:['dictionary api','thesaurus','word definition','vocabulary'],
+        t:['dictionary','thesaurus','vocabulary','etymology','lexicon'],
+        i:'fa-book-open' },
+
+      /* ── Quotes & Inspiration ── */
+      { p:['random quote','motivational quote','inspirational quote','daily quote'],
+        t:['quotes','quote','inspiration','motivational','wisdom','proverb','affirmation'],
+        i:'fa-quote-right' },
+
+      /* ── Jokes & Humor ── */
+      { p:['random joke','dad joke','joke api','funny quote'],
+        t:['jokes','joke','humor','meme','memes','funny','comedy','pun'],
+        i:'fa-face-laugh' },
+
+      /* ── Trivia & Facts ── */
+      { p:['random fact','trivia api','fun fact','did you know'],
+        t:['trivia','facts','fact'],
+        i:'fa-lightbulb' },
+
+      /* ── Horoscope & Astrology ── */
+      { p:['horoscope api','zodiac sign','daily horoscope'],
+        t:['horoscope','zodiac','astrology','tarot','numerology'],
+        i:'fa-star-and-crescent' },
+
+      /* ── Dating & Relationships ── */
+      { p:['dating app','match making','online dating'],
+        t:['dating','relationship'],
+        i:'fa-heart' },
+
+      /* ── NSFW / Adult ── */
+      { p:['adult content','explicit content','nsfw'],
+        t:['nsfw','adult','explicit','mature'],
+        i:'fa-triangle-exclamation' },
+
+      /* ── Food & Recipes ── */
+      { p:['food recipe','meal planning','nutrition facts','food data','recipe api','meal plan'],
+        t:['recipe','recipes','cooking','cuisine','ingredients','meal','meals','dish','baking','culinary','chef'],
+        i:'fa-utensils' },
+      { p:['restaurant api','food delivery','restaurant search','menu api'],
+        t:['restaurant','restaurants','cafe','diner','eatery','doordash','zomato','yelp'],
+        i:'fa-bowl-food' },
+      { p:['nutrition database','calorie tracker','macronutrient','usda food'],
+        t:['nutrition','calories','protein','vitamins','dietary'],
+        i:'fa-apple-whole' },
+      { p:['coffee shop','coffee api'],
+        t:['coffee','espresso','barista'],
+        i:'fa-mug-hot' },
+      { p:['wine api','beer api','cocktail recipe','cocktail api'],
+        t:['cocktail','cocktails','wine','beer','alcohol','beverage','brewery','winery'],
+        i:'fa-wine-glass' },
+
+      /* ── Travel & Tourism ── */
+      { p:['flight search','flight data','airline api','airport data','flight status'],
+        t:['flight','flights','airline','airport','aviation','iata'],
+        i:'fa-plane' },
+      { p:['hotel search','hotel api','accommodation','hotel booking'],
+        t:['hotel','hotels','hostel','resort','lodging','airbnb'],
+        i:'fa-hotel' },
+      { p:['car rental','vehicle hire','rent a car'],
+        t:['rental'],
+        i:'fa-car' },
+      { p:['cruise ship','ferry service'],
+        t:['cruise','ferry','sailing'],
+        i:'fa-ship' },
+      { p:['train schedule','rail api','subway','metro api'],
+        t:['train','trains','rail','transit','subway','metro','amtrak'],
+        i:'fa-train' },
+      { p:['bus schedule','bus route','intercity bus'],
+        t:['bus'],
+        i:'fa-bus' },
+      { p:['travel guide','travel api','tourist attraction','sightseeing','travel data'],
+        t:['travel','tourism','tourist','sightseeing','vacation','holiday','itinerary'],
+        i:'fa-suitcase' },
+      { p:['passport check','visa requirement','border crossing'],
+        t:['passport','visa'],
+        i:'fa-passport' },
+
+      /* ── Health & Medical ── */
+      { p:['mental health','mindfulness','meditation api','therapy','counseling'],
+        t:['mindfulness','meditation','anxiety','depression','psychology','therapy','wellbeing'],
+        i:'fa-brain' },
+      { p:['drug interaction','medication database','pharmaceutical','pharmacy api','drug database'],
+        t:['drugs','drug','medication','medications','pharmaceutical','prescription','pharmacy','pill','pills'],
+        i:'fa-pills' },
+      { p:['fitness tracker','workout api','exercise database','gym api'],
+        t:['fitness','workout','exercise','gym','training','cardio','hiit','yoga','pilates'],
+        i:'fa-dumbbell' },
+      { p:['heart rate','blood pressure','cardiovascular'],
+        t:['cardiac','heartrate','pulse','hrv'],
+        i:'fa-heart-pulse' },
+      { p:['blood glucose','diabetes','cholesterol','lab test','biomarker'],
+        t:['glucose','diabetes','insulin','cholesterol','biomarker'],
+        i:'fa-droplet' },
+      { p:['sleep tracker','sleep data','sleep quality'],
+        t:['sleep','insomnia','circadian'],
+        i:'fa-moon' },
+      { p:['dna analysis','genome sequencing','genetic data'],
+        t:['dna','genome','genetics','bioinformatics','genomics'],
+        i:'fa-dna' },
+      { p:['vaccine data','covid','pandemic'],
+        t:['vaccine','virus','disease','epidemic','pathogen'],
+        i:'fa-virus' },
+      { p:['health api','medical api','healthcare data','hospital api','patient data','clinical data','electronic health','ehr','emr','fhir'],
+        t:['health','medical','medicine','doctor','physician','clinic','hospital','healthcare'],
+        i:'fa-stethoscope' },
+
+      /* ── Maps & Location ── */
+      { p:['geocoding api','reverse geocoding','address lookup','geocode'],
+        t:['geocoding','geocode','geolocation','geoip'],
+        i:'fa-location-dot' },
+      { p:['route planning','navigation api','directions api','gps tracking','waypoint'],
+        t:['navigation','route','routes','direction','directions','gps','coordinate','coordinates','latitude','longitude'],
+        i:'fa-location-crosshairs' },
+      { p:['map api','mapping api','map tiles','interactive map','google maps','mapbox'],
+        t:['maps','map','cartography'],
+        i:'fa-map' },
+      { p:['places api','nearby places','point of interest','venue search'],
+        t:['places','place','venue','venues','poi','establishment'],
+        i:'fa-map-pin' },
+      { p:['ip geolocation','ip location','ip address lookup'],
+        t:['ipinfo','maxmind'],
+        i:'fa-earth-americas' },
+      { p:['country data','country info','country api','nation data','flag api','iso country'],
+        t:['country','countries','nation','nations','capital','territory','flag','flags'],
+        i:'fa-earth-americas' },
+      { p:['city data','city api','urban data'],
+        t:['cities','city','urban','municipality','metropolitan'],
+        i:'fa-city' },
+      { p:['time zone','timezone api','utc offset','daylight saving'],
+        t:['timezone','timezones'],
+        i:'fa-clock' },
+
+      /* ── Communication — Email ── */
+      { p:['email api','email service','email marketing','transactional email','smtp api','email verification'],
+        t:['email','emails','mail','newsletter','inbox','sendgrid','mailchimp','mailgun','postmark','mailing'],
+        i:'fa-envelope' },
+
+      /* ── Communication — SMS & Messaging ── */
+      { p:['sms api','text message','whatsapp api','telegram bot','push notification','messaging api'],
+        t:['sms','messaging','whatsapp','telegram','viber','wechat','twilio','vonage','nexmo'],
+        i:'fa-message' },
+
+      /* ── Communication — Chat & Support ── */
+      { p:['live chat','help desk','customer support','chatbot api'],
+        t:['chat','chatbot','helpdesk','intercom','zendesk','crisp'],
+        i:'fa-comments' },
+
+      /* ── Communication — Voice & Phone ── */
+      { p:['voice api','phone call','voip','call center','telephony','ivr system'],
+        t:['voice','call','phone','telephony','voip','sip','pbx'],
+        i:'fa-phone' },
+
+      /* ── Communication — Video Call ── */
+      { p:['video call','video conference','virtual meeting'],
+        t:['zoom','webex','jitsi'],
+        i:'fa-video' },
+
+      /* ── Notifications ── */
+      { p:['push notification','notification api','alert system','fcm','apns'],
+        t:['notifications','notification','onesignal','alert'],
+        i:'fa-bell' },
+
+      /* ── Social Media (platforms first) ── */
+      { p:['twitter api','tweet data','x api'],
+        t:['twitter','tweet','tweets'],
+        i:'fa-x-twitter' },
+      { p:['instagram api','instagram data'],
+        t:['instagram'],
+        i:'fa-instagram' },
+      { p:['facebook api','facebook data','meta api'],
+        t:['facebook'],
+        i:'fa-facebook' },
+      { p:['youtube api','youtube data','youtube search'],
+        t:['youtube'],
+        i:'fa-youtube' },
+      { p:['tiktok api','tiktok data'],
+        t:['tiktok'],
+        i:'fa-tiktok' },
+      { p:['linkedin api','linkedin data'],
+        t:['linkedin'],
+        i:'fa-linkedin' },
+      { p:['reddit api','subreddit','reddit data'],
+        t:['reddit'],
+        i:'fa-reddit' },
+      { p:['discord bot','discord api','discord server'],
+        t:['discord'],
+        i:'fa-discord' },
+      { p:['github api','gitlab api','bitbucket api','pull request','git repository'],
+        t:['github','gitlab','bitbucket','repository','repo'],
+        i:'fa-code-branch' },
+      { p:['slack api','slack bot','slack message'],
+        t:['slack'],
+        i:'fa-slack' },
+      { p:['twitch api','twitch stream','twitch data'],
+        t:['twitch'],
+        i:'fa-twitch' },
+      { p:['social media','social network','social feed','social post'],
+        t:['social'],
+        i:'fa-share-nodes' },
+
+      /* ── Authentication & Identity ── */
+      { p:['oauth api','jwt token','sso','single sign-on','identity provider','user authentication','api authentication','two factor','2fa','mfa'],
+        t:['authentication','authorization','auth','oauth','jwt','saml','sso','openid','keycloak','okta','auth0','cognito','identity','login','session','token','credential'],
+        i:'fa-key' },
+
+      /* ── Security ── */
+      { p:['cybersecurity api','vulnerability database','cve data','malware detection','threat intelligence','firewall api','security scanner'],
+        t:['security','cybersecurity','vulnerability','vulnerabilities','malware','threat','firewall','siem'],
+        i:'fa-shield' },
+      { p:['encryption api','data encryption','hash function','cryptography'],
+        t:['encryption','decrypt','cryptography','cipher','pgp','gpg'],
+        i:'fa-lock' },
+      { p:['password manager','secret vault','credential store'],
+        t:['password','passwords','vault','bitwarden'],
+        i:'fa-user-lock' },
+      { p:['spam detection','fraud detection','phishing detection','bot detection','captcha','recaptcha'],
+        t:['spam','phishing','fraud','scam','captcha'],
+        i:'fa-ban' },
+      { p:['privacy api','gdpr compliance','data protection'],
+        t:['privacy','gdpr','ccpa','compliance'],
+        i:'fa-user-shield' },
+
+      /* ── Cloud & Infrastructure ── */
+      { p:['cloud storage','cloud api','cloud service','aws api','google cloud','azure api'],
+        t:['cloud','aws','azure','gcp','digitalocean','linode','vultr'],
+        i:'fa-cloud' },
+      { p:['docker api','kubernetes','container orchestration','service mesh'],
+        t:['docker','kubernetes','k8s','container','containers','helm','pod'],
+        i:'fa-cube' },
+      { p:['cdn api','content delivery','edge network'],
+        t:['cdn','cloudflare','fastly','akamai'],
+        i:'fa-server' },
+      { p:['file storage','object storage','s3 api','blob storage'],
+        t:['storage','s3','gcs','bucket'],
+        i:'fa-hard-drive' },
+      { p:['server monitoring','uptime monitoring','log monitoring','application monitoring','observability'],
+        t:['monitoring','observability','uptime','sentry','datadog','grafana','prometheus','newrelic'],
+        i:'fa-gauge-high' },
+      { p:['devops api','ci cd','github actions','jenkins','gitlab ci','deployment pipeline'],
+        t:['devops','cicd','jenkins','deployment'],
+        i:'fa-gears' },
+      { p:['terraform','infrastructure as code','provisioning','ansible'],
+        t:['infrastructure','terraform','ansible','pulumi'],
+        i:'fa-sitemap' },
+      { p:['dns api','domain lookup','nameserver','domain registration'],
+        t:['dns','domain','domains','registrar'],
+        i:'fa-globe' },
+      { p:['vpn api','private network','wireguard','tunnel'],
+        t:['vpn','proxy','tunnel'],
+        i:'fa-shield-halved' },
+      { p:['ssl certificate','tls certificate','https cert'],
+        t:['ssl','tls','certificate','certificates','pki'],
+        i:'fa-lock' },
+      { p:['serverless function','lambda function','faas'],
+        t:['serverless','lambda','vercel','netlify'],
+        i:'fa-bolt' },
+
+      /* ── Development & APIs ── */
+      { p:['graphql api','rest api','restful api','websocket api','grpc api','api gateway','openapi','swagger','api documentation'],
+        t:['api','apis','rest','restful','graphql','websocket','grpc','soap','swagger','postman','openapi'],
+        i:'fa-plug' },
+      { p:['webhook integration','event driven','integration api','zapier','make automation'],
+        t:['webhook','webhooks','integration','integrations','zapier','ifttt'],
+        i:'fa-circle-nodes' },
+      { p:['code generator','code snippet','programming api','developer tools','ide plugin'],
+        t:['coding','programming','developer','development'],
+        i:'fa-code' },
+      { p:['git api','version control','code branch','commit history'],
+        t:['git','vcs','branch','commit'],
+        i:'fa-code-branch' },
+      { p:['unit testing','automated testing','test automation','selenium','cypress','jest','e2e test'],
+        t:['testing','tests'],
+        i:'fa-flask' },
+      { p:['api documentation','docs api','reference docs','swagger docs'],
+        t:['documentation','docs'],
+        i:'fa-file-code' },
+      { p:['command line','cli tool','terminal api','shell script'],
+        t:['cli','terminal','shell','bash'],
+        i:'fa-terminal' },
+      { p:['microservice','event driven','message queue','kafka','rabbitmq'],
+        t:['microservices','microservice','kafka','rabbitmq','nats'],
+        i:'fa-diagram-project' },
+      { p:['web scraping','data scraping','web crawler','headless browser'],
+        t:['scraping','scraper','crawler','spider','playwright','puppeteer'],
+        i:'fa-spider' },
+
+      /* ── E-Commerce ── */
+      { p:['shopify api','woocommerce','online store','e-commerce api','ecommerce api'],
+        t:['ecommerce','shopify','woocommerce','magento','bigcommerce'],
+        i:'fa-store' },
+      { p:['product catalog','barcode lookup','qr code scanner','sku lookup','barcode api'],
+        t:['catalog','barcode','sku','upc','ean'],
+        i:'fa-barcode' },
+      { p:['shopping cart','checkout api','order management','purchase api'],
+        t:['cart','checkout','orders','order','purchase','wishlist','basket'],
+        i:'fa-cart-shopping' },
+      { p:['shipping api','delivery tracking','logistics api','courier tracking','parcel tracking','fedex','ups api','dhl api'],
+        t:['shipping','delivery','logistics','courier','parcel','tracking','dispatch'],
+        i:'fa-truck' },
+      { p:['price tracker','discount api','coupon api','deal finder','promo code'],
+        t:['pricing','price','discount','coupon','voucher','promo','deals','deal'],
+        i:'fa-tag' },
+      { p:['product review','star rating','testimonial'],
+        t:['reviews','review','rating','ratings'],
+        i:'fa-star-half-stroke' },
+      { p:['amazon api','ebay api','etsy api','marketplace api'],
+        t:['amazon','ebay','etsy','aliexpress','marketplace'],
+        i:'fa-shop' },
+
+      /* ── Productivity & Business ── */
+      { p:['calendar api','event scheduling','appointment booking','meeting scheduler','google calendar'],
+        t:['calendar','calendars','schedule','scheduling','appointment','appointments','booking','calendly','meeting'],
+        i:'fa-calendar' },
+      { p:['project management','task manager','kanban board','todo list','jira api','asana api','trello api'],
+        t:['task','tasks','todo','project','projects','kanban','trello','asana','notion','jira','clickup','linear'],
+        i:'fa-list-check' },
+      { p:['document management','pdf api','google docs','spreadsheet api','word processing'],
+        t:['document','documents','spreadsheet','spreadsheets','pdf','confluence','dropbox'],
+        i:'fa-file' },
+      { p:['crm api','salesforce','hubspot','contact management','lead management'],
+        t:['crm','salesforce','hubspot','pipedrive','contact','contacts','leads'],
+        i:'fa-address-book' },
+      { p:['human resources','payroll api','employee data','hr api','workforce'],
+        t:['hr','employees','employee','payroll','workday','recruit','recruiting','onboarding'],
+        i:'fa-users' },
+      { p:['supply chain','erp api','inventory management','warehouse management','procurement'],
+        t:['erp','inventory','warehouse','fulfillment','procurement','supplychain'],
+        i:'fa-boxes-stacking' },
+      { p:['invoice api','billing api','accounting api','quickbooks','xero'],
+        t:['invoices','invoice','billing','accounting','quickbooks','xero','freshbooks'],
+        i:'fa-file-invoice-dollar' },
+      { p:['survey api','online form','poll api','questionnaire','typeform','surveymonkey'],
+        t:['survey','surveys','form','forms','poll','polls','questionnaire'],
+        i:'fa-clipboard-list' },
+      { p:['content management','cms api','wordpress api','headless cms','strapi','contentful','sanity'],
+        t:['cms','wordpress','drupal','joomla','ghost','contentful','strapi','sanity'],
+        i:'fa-pen-to-square' },
+      { p:['workflow automation','process automation','rpa','robotic process','business process'],
+        t:['workflow','workflows','automation'],
+        i:'fa-robot' },
+
+      /* ── Education ── */
+      { p:['online learning','learning management','e-learning','course api','lms api','educational api'],
+        t:['education','learning','courses','course','lesson','lessons','lecture','lms','moodle'],
+        i:'fa-graduation-cap' },
+      { p:['exam api','quiz api','assessment','grade api'],
+        t:['quiz','exam','exams','assessment','certificate'],
+        i:'fa-pencil' },
+      { p:['school api','university api','college data'],
+        t:['school','university','college','academy','campus'],
+        i:'fa-school' },
+      { p:['math api','mathematics','algebra','calculus','equation solver'],
+        t:['math','mathematics','algebra','calculus','arithmetic'],
+        i:'fa-calculator' },
+      { p:['science api','physics','chemistry','biology','lab data'],
+        t:['science','physics','chemistry','biology','geology'],
+        i:'fa-flask' },
+      { p:['historical data','history api','timeline','historical events'],
+        t:['history','historical','archive'],
+        i:'fa-landmark' },
+
+      /* ── Government & Public ── */
+      { p:['government api','government data','public data','federal data','open government','civic data'],
+        t:['government','governmental','gov','federal','congress','parliament','senate','legislation','democracy'],
+        i:'fa-landmark' },
+      { p:['population data','census data','demographic data'],
+        t:['census','population','demographic','demographics'],
+        i:'fa-people-group' },
+      { p:['election data','voting data','ballot','polling data'],
+        t:['election','elections','vote','voting','ballot'],
+        i:'fa-person-booth' },
+      { p:['tax api','tax calculator','vat api','irs','gst'],
+        t:['tax','taxes','irs','vat','gst','fiscal'],
+        i:'fa-file-invoice' },
+      { p:['law enforcement','crime data','police api','criminal records'],
+        t:['police','crime','criminal','fbi','interpol'],
+        i:'fa-shield-halved' },
+      { p:['compliance api','regulatory','gdpr api','hipaa','audit api'],
+        t:['compliance','regulatory','regulation','audit'],
+        i:'fa-clipboard-check' },
+
+      /* ── Tools & Utilities ── */
+      { p:['text analysis','sentiment analysis','text processing','nlp api','named entity','text summarization','text classification'],
+        t:['sentiment','summarization','summarize','paraphrase'],
+        i:'fa-font' },
+      { p:['qr code generator','qr code api','barcode generator'],
+        t:['qrcode'],
+        i:'fa-qrcode' },
+      { p:['url shortener','link shortener','short link','url preview','link unfurl'],
+        t:['url','urls','shortener','bitly','tinyurl'],
+        i:'fa-link' },
+      { p:['color api','color picker','hex color','color converter','palette generator'],
+        t:['color','colors','colour','colours','hex','rgb','hsl'],
+        i:'fa-palette' },
+      { p:['file converter','file compression','document conversion','pdf conversion','zip api'],
+        t:['converter','conversion','compress','compression'],
+        i:'fa-file-arrow-up' },
+      { p:['unit converter','currency converter','length converter','weight converter'],
+        t:['calculator','conversion'],
+        i:'fa-calculator' },
+      { p:['uuid generator','random data','fake data','lorem ipsum','placeholder','password generator','random string'],
+        t:['random','generator','uuid','guid','dummy','placeholder'],
+        i:'fa-shuffle' },
+      { p:['regex validator','input validator','json validator','schema validator','form validator'],
+        t:['validator','validation'],
+        i:'fa-check-circle' },
+      { p:['timestamp api','unix time','epoch converter','date api','time api','date time'],
+        t:['timestamp','epoch'],
+        i:'fa-clock' },
+      { p:['network tool','ip lookup','ping api','whois lookup','dns lookup','subnet calculator'],
+        t:['network','networking','ping','whois','subnet','cidr','hostname'],
+        i:'fa-network-wired' },
+      { p:['hash generator','checksum','file hash','data integrity','sha256'],
+        t:['hash','checksum','integrity'],
+        i:'fa-fingerprint' },
+      { p:['base64 encode','data encoding','text encoding'],
+        t:['encoding','decoding','base64'],
+        i:'fa-code' },
+      { p:['code diff','file compare','text diff','patch api'],
+        t:['diff','compare','comparison'],
+        i:'fa-code-compare' },
+      { p:['image resize','image crop','thumbnail','image watermark','image compress'],
+        t:['resize','thumbnail','watermark'],
+        i:'fa-crop' },
+      { p:['speech to text','text to speech','voice recognition','audio transcription','tts api','stt api'],
+        t:['transcription','speech','tts','stt','whisper','deepgram','elevenlabs'],
+        i:'fa-microphone' },
+      { p:['mock api','sandbox api','test api','fake api','api stub'],
+        t:['mock','sandbox'],
+        i:'fa-flask' },
+
+      /* ── IoT & Hardware ── */
+      { p:['internet of things','smart home api','home automation','iot platform','iot api','iot device','smart device'],
+        t:['iot','arduino','raspberry','esp32','zigbee','sensor','sensors','actuator','smarthome'],
+        i:'fa-microchip' },
+      { p:['smart home','philips hue','google home','amazon alexa','nest thermostat'],
+        t:['hue','alexa','thermostat'],
+        i:'fa-house-signal' },
+      { p:['smartwatch api','wearable api','fitness tracker','activity tracker'],
+        t:['wearable','smartwatch','fitbit','garmin'],
+        i:'fa-watch' },
+      { p:['drone api','uav','autonomous vehicle'],
+        t:['drone','drones','uav'],
+        i:'fa-helicopter' },
+
+      /* ── Space & Astronomy ── */
+      { p:['space api','nasa api','astronomy api','space data','solar system','satellite data','iss api','star data','planet data'],
+        t:['space','astronomy','nasa','esa','planet','planets','galaxy','nebula','asteroid','comet','rocket','spacecraft','telescope','astrophysics','satellite'],
+        i:'fa-rocket' },
+
+      /* ── Environment & Nature ── */
+      { p:['carbon footprint','climate change','renewable energy','sustainability api','green energy','environmental data','eco api'],
+        t:['environment','sustainability','ecological','carbon','emissions','renewable','recycling','eco'],
+        i:'fa-leaf' },
+      { p:['energy api','electricity grid','power consumption','solar api','wind energy'],
+        t:['energy','electricity','solar','kwh'],
+        i:'fa-bolt-lightning' },
+      { p:['ocean data','marine api','sea level','flood data','drought data'],
+        t:['ocean','marine','sea','hydrology','flood','drought'],
+        i:'fa-water' },
+      { p:['earthquake api','seismic data','volcano','natural disaster','wildfire','hazard'],
+        t:['earthquake','seismic','volcano','wildfire','disaster'],
+        i:'fa-house-crack' },
+
+      /* ── Animals & Nature ── */
+      { p:['animal api','pet api','pet data','wildlife','dog api','cat api','dog breeds','cat breeds'],
+        t:['animal','animals','pet','pets','dog','dogs','cat','cats','bird','birds','fish','wildlife','fauna','zoo','veterinary'],
+        i:'fa-paw' },
+      { p:['plant api','flower api','tree data','agriculture api','crop data','farming'],
+        t:['plant','plants','flower','flowers','tree','trees','garden','botany','flora','agriculture','crops','farming'],
+        i:'fa-seedling' },
+
+      /* ── Real Estate ── */
+      { p:['real estate api','property search','property data','zillow api','real estate data','home listing','mls api'],
+        t:['realestate','property','properties','zillow','redfin','realtor','listing','listings','rent','lease','landlord','tenant'],
+        i:'fa-house' },
+      { p:['apartment api','condo data','flat rental'],
+        t:['apartment','apartments','condo'],
+        i:'fa-building' },
+
+      /* ── Jobs & Career ── */
+      { p:['job search','job api','career api','job listing','employment api','job board','recruitment api','resume parser','glassdoor','indeed'],
+        t:['jobs','job','career','careers','employment','hiring','recruit','recruiting','salary','resume','vacancy'],
+        i:'fa-briefcase' },
+      { p:['freelance api','gig work','remote jobs','upwork','fiverr'],
+        t:['freelance','gig'],
+        i:'fa-person-digging' },
+      { p:['company data','startup data','business api','organization data','firm data'],
+        t:['company','companies','organization','organizations','startup','startups','enterprise','firm'],
+        i:'fa-building' },
+
+      /* ── User & Account ── */
+      { p:['user management','user api','account api','profile api','member api','user data','user profile'],
+        t:['users','user','profile','profiles','account','accounts','member','members','subscriber','subscribers','person','people'],
+        i:'fa-user' },
+
+      /* ── Team & Community ── */
+      { p:['team management','community api','group api','workspace api'],
+        t:['team','teams','group','groups','community','communities','workspace'],
+        i:'fa-users' },
+
+      /* ── Admin & Dashboard ── */
+      { p:['admin api','admin panel','back office','control panel','dashboard api'],
+        t:['admin','dashboard','backoffice'],
+        i:'fa-gauge' },
+
+      /* ── Search ── */
+      { p:['search api','full text search','site search','search engine','search results'],
+        t:['search'],
+        i:'fa-magnifying-glass' },
+
+      /* ── Database ── */
+      { p:['database api','sql api','nosql','mysql','postgres','mongodb','redis','elasticsearch','dynamodb','firestore'],
+        t:['database','db','sql','mysql','postgres','postgresql','mongodb','redis','elasticsearch','nosql','sqlite','mariadb','influxdb','dynamodb','firestore','supabase'],
+        i:'fa-database' },
+
+      /* ── Analytics & Data ── */
+      { p:['analytics api','business intelligence','data analytics','metrics api','reporting api','kpi tracking','event tracking'],
+        t:['analytics','analysis','statistics','metrics','insights','reporting','kpi','tracking','telemetry','measurement'],
+        i:'fa-chart-line' },
+      { p:['chart api','graph api','data visualization','histogram','heatmap'],
+        t:['charts','chart','graphs','graph','visualization','visualisation'],
+        i:'fa-chart-bar' },
+      { p:['big data','data pipeline','data lake','data warehouse','etl api','data processing'],
+        t:['bigdata','dataset','datasets','etl','pipeline','warehouse','snowflake','bigquery','dbt'],
+        i:'fa-table' },
+
+      /* ── Platforms & Named Services ── */
+      { p:['firebase api','firebase service'],
+        t:['firebase'],
+        i:'fa-fire' },
+      { p:['google api','google service','google workspace','gsuite'],
+        t:['google'],
+        i:'fa-google' },
+      { p:['microsoft api','microsoft graph','office 365','microsoft azure'],
+        t:['microsoft'],
+        i:'fa-microsoft' },
+      { p:['apple api','ios api','app store','icloud'],
+        t:['apple','ios','macos','icloud'],
+        i:'fa-apple' },
+      { p:['paypal api','paypal payment'],
+        t:['paypal','venmo'],
+        i:'fa-paypal' },
+      { p:['uber api','lyft api','rideshare','ride hailing'],
+        t:['uber','lyft','grab','gojek','rideshare'],
+        i:'fa-car-side' },
+
+      /* ── Miscellaneous Precise ── */
+      { p:['rate limiting','api quota','throttle api','rate limit'],
+        t:['ratelimit','throttle','quota'],
+        i:'fa-gauge-simple' },
+      { p:['embed widget','iframe embed','plugin api'],
+        t:['embed','widget','iframe','plugin'],
+        i:'fa-puzzle-piece' },
+      { p:['forum api','discussion board','community forum','q&a api'],
+        t:['forum','forums','discussion','board','discourse'],
+        i:'fa-comments' },
+      { p:['template api','theme api','layout api'],
+        t:['template','templates','theme','themes','layout'],
+        i:'fa-object-group' },
+      { p:['activity log','audit log','event log','audit trail','history api'],
+        t:['logs','log','logging','audit','history'],
+        i:'fa-scroll' },
+      { p:['report api','export api','data export','file download'],
+        t:['reports','report','export','imports','import'],
+        i:'fa-file-export' },
+      { p:['batch processing','bulk api','job queue','cron job','background job'],
+        t:['batch','bulk','queue','cron','worker'],
+        i:'fa-list-ol' },
+      { p:['proxy api','reverse proxy','api gateway','load balancer','middleware'],
+        t:['gateway'],
+        i:'fa-arrow-right-arrow-left' },
+      { p:['cache api','redis cache','memcache','ttl cache'],
+        t:['cache','caching','memcached'],
+        i:'fa-bolt' },
+      { p:['settings api','config api','preferences api','configuration'],
+        t:['settings','config','configuration','preferences'],
+        i:'fa-gear' },
+      { p:['protocol sse','server sent events','long polling','eventsource'],
+        t:['sse'],
+        i:'fa-tower-broadcast' },
+      { p:['mqtt protocol','amqp','message broker','iot messaging'],
+        t:['mqtt','amqp','stomp'],
+        i:'fa-arrows-left-right' },
+    ];
+
+    /* ─────────────────────────────────────────────────────
+       Matching algorithm — accurate & word-boundary safe
+    ───────────────────────────────────────────────────── */
+    function getCategoryIcon(name) {
+      // 1. Normalise: lowercase, replace separators with spaces, collapse
+      const norm = name.toLowerCase()
+        .replace(/[-_/\\|+&]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      // 2. Token set — split on spaces (safe word-boundary matching)
+      const tokens = new Set(norm.split(' ').filter(t => t.length > 0));
+
+      // 3. Simple de-pluralise helper for token lookup
+      function stem(t) {
+        if (t.length > 5 && t.endsWith('ies')) return t.slice(0,-3)+'y';
+        if (t.length > 4 && t.endsWith('ves')) return t.slice(0,-3)+'f';
+        if (t.length > 4 && t.endsWith('ses')) return t.slice(0,-2);
+        if (t.length > 3 && t.endsWith('s'))   return t.slice(0,-1);
+        return t;
+      }
+      const stemmedTokens = new Set([...tokens].map(stem));
+
+      // 4. Build phrase list sorted longest-first (most specific wins)
+      const sortedRules = [...ICON_RULES].sort((a, b) => {
+        const aMax = a.p && a.p.length ? Math.max(...a.p.map(p=>p.length)) : 0;
+        const bMax = b.p && b.p.length ? Math.max(...b.p.map(p=>p.length)) : 0;
+        return bMax - aMax;
+      });
+
+      // PASS 1 · Phrase substring match (exact, multi-word, min 5 chars)
+      for (const rule of sortedRules) {
+        if (!rule.p) continue;
+        for (const phrase of rule.p) {
+          if (phrase.length >= 5 && norm.includes(phrase)) return rule.i;
+        }
+      }
+
+      // PASS 2 · Whole-word token match (exact + stemmed)
+      for (const rule of ICON_RULES) {
+        if (!rule.t) continue;
+        for (const word of rule.t) {
+          if (tokens.has(word) || stemmedTokens.has(word)) return rule.i;
+        }
+      }
+
+      // PASS 3 · First-token prefix for very short/abbreviated names (≥3 chars)
+      const firstToken = [...tokens][0] || '';
+      if (firstToken.length >= 3) {
+        for (const rule of ICON_RULES) {
+          const allTerms = [...(rule.p||[]), ...(rule.t||[])];
+          if (allTerms.some(term => term.split(' ')[0].startsWith(firstToken))) return rule.i;
+        }
+      }
+
+      // FINAL · Deterministic hash fallback — always a real FA icon, never a letter
+      const FALLBACKS = [
+        'fa-cube','fa-circle-nodes','fa-layer-group','fa-gem','fa-fire',
+        'fa-compass','fa-atom','fa-diagram-project','fa-puzzle-piece',
+        'fa-shapes','fa-bolt','fa-star','fa-infinity','fa-arrow-trend-up',
+        'fa-brackets-curly','fa-table-cells-large','fa-wand-magic-sparkles',
+      ];
+      const hash = [...name].reduce((a,c)=>(a*31+c.charCodeAt(0))|0, 0);
+      return FALLBACKS[Math.abs(hash) % FALLBACKS.length];
+    }
+
+    /**
+     * Returns a deterministic accent color for a category.
+     * Each category always gets the same color.
+     */
+    function getCategoryColor(name) {
+      const COLORS = [
+        { color: '#fbbf24', bg: 'rgba(251,191,36,0.12)',  glow: 'rgba(251,191,36,0.25)' },
+        { color: '#f97316', bg: 'rgba(249,115,22,0.12)',  glow: 'rgba(249,115,22,0.25)' },
+        { color: '#4ade80', bg: 'rgba(74,222,128,0.12)',  glow: 'rgba(74,222,128,0.22)' },
+        { color: '#60a5fa', bg: 'rgba(96,165,250,0.12)',  glow: 'rgba(96,165,250,0.22)' },
+        { color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', glow: 'rgba(167,139,250,0.22)' },
+        { color: '#f472b6', bg: 'rgba(244,114,182,0.12)', glow: 'rgba(244,114,182,0.22)' },
+        { color: '#34d399', bg: 'rgba(52,211,153,0.12)',  glow: 'rgba(52,211,153,0.22)' },
+        { color: '#fb923c', bg: 'rgba(251,146,60,0.12)',  glow: 'rgba(251,146,60,0.22)' },
+        { color: '#38bdf8', bg: 'rgba(56,189,248,0.12)',  glow: 'rgba(56,189,248,0.22)' },
+        { color: '#c084fc', bg: 'rgba(192,132,252,0.12)', glow: 'rgba(192,132,252,0.22)' },
+        { color: '#e879f9', bg: 'rgba(232,121,249,0.12)', glow: 'rgba(232,121,249,0.22)' },
+        { color: '#2dd4bf', bg: 'rgba(45,212,191,0.12)',  glow: 'rgba(45,212,191,0.22)' },
+      ];
+      const hash = [...name].reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 0);
+      return COLORS[Math.abs(hash) % COLORS.length];
+    }
+
     /* ── GLOBALS ── */
     let ALL = [], currentApi = null, activeMethod = 'GET', baseOrigin = '';
     let modalSource = null, sbScrollTop = 0, currentBlobUrl = null;
     let _notifData = [], _readSet = new Set(), _dismissedSet = new Set();
     const NP_KEY_READ = 'np_read', NP_KEY_DISMISSED = 'np_dismissed';
 
-    /* ── Notif persistence ── */
     function _npSave() {
       try { localStorage.setItem(NP_KEY_READ, JSON.stringify([..._readSet])); localStorage.setItem(NP_KEY_DISMISSED, JSON.stringify([..._dismissedSet])); } catch(_) {}
     }
@@ -911,7 +1711,6 @@
       try { const r=localStorage.getItem(NP_KEY_READ),d=localStorage.getItem(NP_KEY_DISMISSED); if(r)JSON.parse(r).forEach(i=>_readSet.add(i)); if(d)JSON.parse(d).forEach(i=>_dismissedSet.add(i)); } catch(_) {}
     }
 
-    /* ── UTILS ── */
     function showToast(msg, err=false) {
       const el=document.getElementById('toast'),ico=document.getElementById('toast-ico');
       ico.className=err?'fas fa-times-circle':'fas fa-check';
@@ -935,7 +1734,6 @@
     function revokeBlobUrl() { if(currentBlobUrl){URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=null;} }
     function escAttr(s) { return s.replace(/"/g,'&quot;'); }
 
-    /* ── SCROLL LOCK ── */
     let _lockCount=0;
     function lockPage() {
       if(_lockCount===0){const sbW=window.innerWidth-document.documentElement.clientWidth;document.documentElement.style.setProperty('--sb-w',sbW+'px');document.documentElement.classList.add('sb-lock');}
@@ -967,18 +1765,46 @@
       const filtered=ALL.map(cat=>{const items=cat.items.filter(a=>a.name.toLowerCase().includes(q)||(a.desc||'').toLowerCase().includes(q)||cat.name.toLowerCase().includes(q));return items.length?{...cat,items}:null;}).filter(Boolean);
       renderSidebar(filtered,true);
     });
-    function renderSidebar(cats,expandAll=false){
-      if(!cats.length){sbList.innerHTML=`<div class="sb-empty"><i class="fas fa-search"></i><span>No results found.</span></div>`;return;}
-      sbList.innerHTML=cats.map(cat=>`
+
+    function renderSidebar(cats, expandAll=false) {
+      if (!cats.length) {
+        sbList.innerHTML = `<div class="sb-empty"><i class="fas fa-search"></i><span>No results found.</span></div>`;
+        return;
+      }
+
+      sbList.innerHTML = cats.map(cat => {
+        const icon = getCategoryIcon(cat.name);
+        const color = getCategoryColor(cat.name).color;
+        return `
         <div class="cat-block${expandAll?' open':''}">
-          <div class="cat-row"><div class="cat-left"><span class="cat-name">${cat.name}</span><span class="cat-cnt">${cat.items.length}</span></div><i class="fas fa-chevron-right cat-arrow"></i></div>
-          <div class="cat-items">${cat.items.map(api=>{const ms=api.methods||['GET'];const pill=ms.length>1?`<span class="mp mm">MULTI</span>`:`<span class="mp ${mpClass(ms[0])}">${ms[0]}</span>`;return`<div class="api-row" data-cat="${escAttr(cat.name)}" data-api="${escAttr(api.name)}">${pill}<div class="api-info"><div class="api-name">${api.name}</div>${api.desc?`<div class="api-desc">${api.desc}</div>`:''}</div></div>`;}).join('')}</div>
-        </div>`).join('');
-      sbList.querySelectorAll('.cat-row').forEach(r=>r.addEventListener('click',()=>r.closest('.cat-block').classList.toggle('open')));
-      sbList.querySelectorAll('.api-row').forEach(row=>{
-        row.addEventListener('click',()=>{
-          const cat=ALL.find(c=>c.name===row.dataset.cat),api=cat?.items.find(a=>a.name===row.dataset.api);
-          if(!api)return; sbScrollTop=sbList.scrollTop; openModal(api,'sidebar');
+          <div class="cat-row">
+            <div class="cat-left">
+              <i class="fas ${icon} cat-icon" style="color:${color};"></i>
+              <span class="cat-name">${cat.name}</span>
+              <span class="cat-cnt">${cat.items.length}</span>
+            </div>
+            <i class="fas fa-chevron-right cat-arrow"></i>
+          </div>
+          <div class="cat-items">${cat.items.map(api => {
+            const ms = api.methods || ['GET'];
+            const pill = ms.length > 1
+              ? `<span class="mp mm">MULTI</span>`
+              : `<span class="mp ${mpClass(ms[0])}">${ms[0]}</span>`;
+            return `<div class="api-row" data-cat="${escAttr(cat.name)}" data-api="${escAttr(api.name)}">${pill}<div class="api-info"><div class="api-name">${api.name}</div>${api.desc ? `<div class="api-desc">${api.desc}</div>` : ''}</div></div>`;
+          }).join('')}</div>
+        </div>`;
+      }).join('');
+
+      sbList.querySelectorAll('.cat-row').forEach(r =>
+        r.addEventListener('click', () => r.closest('.cat-block').classList.toggle('open'))
+      );
+      sbList.querySelectorAll('.api-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const cat = ALL.find(c => c.name === row.dataset.cat);
+          const api = cat?.items.find(a => a.name === row.dataset.api);
+          if (!api) return;
+          sbScrollTop = sbList.scrollTop;
+          openModal(api, 'sidebar');
         });
       });
     }
@@ -1070,13 +1896,8 @@
     function renderNotifs(list){_notifData=list;_readSet.clear();_dismissedSet.clear();_npLoad();_renderNpItems();}
     document.getElementById('np-mar-btn').addEventListener('click',()=>{_notifData.forEach((_,i)=>{if(!_dismissedSet.has(i)){_readSet.add(i);const item=document.getElementById('npi-'+i);if(item){item.classList.remove('unread');item.classList.add('read');}}});_npSave();refreshNpBadge();});
 
-    /* ── JSON highlight ── */
     function highlight(json){return json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,m=>{if(/^"/.test(m))return/:$/.test(m)?`<span class="jk">${m}</span>`:`<span class="jstr">${m}</span>`;if(/true|false/.test(m))return`<span class="jbool">${m}</span>`;if(/null/.test(m))return`<span class="jnull">${m}</span>`;return`<span class="jnum">${m}</span>`;});}
-
-    /* ── cURL builder ── */
     function buildCurl(url,method,body=null){if(method==='POST'||method==='PUT'){const b=body?JSON.stringify(body):'{}';return`curl -X ${method} "${url}" \\\n  -H "Content-Type: application/json" \\\n  -d '${b}'`;}if(method==='DELETE')return`curl -X DELETE "${url}"`;return`curl -X GET "${url}"`;}
-
-    /* ── Modal URL ── */
     function getQueryUrl(api){const base=baseOrigin+api.path.split('?')[0];const params=(api.params||[]).map(p=>{const el=document.getElementById('pi_'+p.name);const v=el?el.value.trim():'';return v?`${encodeURIComponent(p.name)}=${encodeURIComponent(v)}`:null;}).filter(Boolean);return params.length?base+'?'+params.join('&'):base;}
 
     function updateEpDisplay(api){
@@ -1091,7 +1912,6 @@
       document.getElementById('curl-copy').onclick=()=>copyText(curlTxt,'cURL copied!');
     }
 
-    /* ── Modal open/close — no-stutter using rAF ── */
     function openModal(api, source='page') {
       currentApi=api; modalSource=source;
       activeMethod=(api.methods&&api.methods.length)?api.methods[0].toUpperCase():'GET';
@@ -1112,12 +1932,9 @@
       const rc=document.getElementById('res-copy');rc.innerHTML='<i class="fas fa-copy"></i>Copy';rc.style.color='';
       revokeBlobUrl(); renderMethodView(api); updateEpDisplay(api);
       document.getElementById('run-btn').onclick=()=>runRequest(api);
-
-      /* Use rAF to ensure DOM paint before triggering the CSS transition — eliminates first-open stutter */
       const moEl=document.getElementById('mo');
       requestAnimationFrame(()=>{
-        moEl.classList.add('on');
-        lockPage();
+        moEl.classList.add('on'); lockPage();
         if(source==='sidebar') freezeList();
       });
     }
@@ -1140,7 +1957,6 @@
       }
     });
 
-    /* ── Render method view ── */
     function renderMethodView(api){
       const params=api.params||[],paramsSec=document.getElementById('params-sec'),paramsWrap=document.getElementById('params-wrap'),postSec=document.getElementById('post-sec');
       if(activeMethod==='POST'||activeMethod==='PUT'){
@@ -1157,14 +1973,12 @@
       }
     }
 
-    /* ── res-copy helper ── */
     function setResBtn(mode,val,filename){
       const btn=document.getElementById('res-copy');
       if(mode==='download'){btn.innerHTML='<i class="fas fa-download"></i>Download';btn.style.color='var(--md-blu)';btn.onclick=()=>{const a=Object.assign(document.createElement('a'),{href:val,download:filename});document.body.appendChild(a);a.click();document.body.removeChild(a);};}
       else{btn.innerHTML='<i class="fas fa-copy"></i>Copy';btn.style.color='';btn.onclick=()=>copyText(val,'Response copied!');}
     }
 
-    /* ── Run request ── */
     async function runRequest(api){
       const btn=document.getElementById('run-btn'),resWrap=document.getElementById('res-wrap'),resSt=document.getElementById('res-status'),resTm=document.getElementById('res-time'),resPre=document.getElementById('res-pre'),resType=document.getElementById('res-type'),cleanUrl=baseOrigin+api.path.split('?')[0];
       btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin" style="font-size:11px;"></i>Sending…';
@@ -1192,7 +2006,6 @@
       }finally{btn.disabled=false;btn.innerHTML='<i class="fas fa-play" style="font-size:11px;"></i>Send Request Again';}
     }
 
-    /* ── Page card bindings ── */
     document.getElementById('copy-base').addEventListener('click',()=>copyText(document.getElementById('baseUrlTxt').textContent,'Base URL copied!'));
     document.getElementById('copy-ex').addEventListener('click',()=>copyText(document.getElementById('exUrlTxt').textContent,'URL copied!'));
     document.getElementById('copy-rf').addEventListener('click',()=>{const op=document.getElementById('rf-op').textContent;copyText(`{"operator":"${op}","timestamp":"2025-12-27T10:43:41.675Z","responseTime":"4ms"}`,'Format copied!');});
@@ -1232,7 +2045,6 @@
         renderNotifs(nfData.notifications||[]);
         renderSidebar(ALL);
         pickExampleApi();
-        // Trigger entrance animation after data is painted
         requestAnimationFrame(()=>{ page.classList.add('animate-in'); });
       }catch(err){console.error('[docs] bootstrap error:',err);}
       finally{ldr.classList.add('out');}

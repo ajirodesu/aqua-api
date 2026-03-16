@@ -5,7 +5,7 @@ export const meta = {
   name: 'example',
   desc: 'A simple example API that echoes back the input text with a greeting',
   method: ['get', 'post'],
-  category: 'Example',
+  category: 'example',
   params: [
     {
       name: 'text',
