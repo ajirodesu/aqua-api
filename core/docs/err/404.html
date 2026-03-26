@@ -3,350 +3,198 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0a0f">
-  <title>404 — Page Not Found</title>
+  <meta name="theme-color" content="#0F0F11">
+  <title>404 — Not Found</title>
   <link rel="icon" href="/image/icon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* ── RESET ── */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    *, *:focus { outline: none; -webkit-tap-highlight-color: transparent; }
-    a, button { -webkit-tap-highlight-color: transparent; }
-    ::selection { background: rgba(251,191,36,0.24); color: #e8e8f2; }
-
-    /* ── DESIGN TOKENS — unified MD3 ── */
     :root {
-      --md-bg:        #0a0a0f;
-      --md-surf-1:    #12121a;
-      --md-surf-2:    #1a1a24;
-      --md-surf-3:    #22222e;
-      --md-out:       #2a2a38;
-      --md-out-var:   #38384a;
-      --md-on-bg:     #e8e8f2;
-      --md-on-surf:   #c8c8dc;
-      --md-on-surf-v: #8888a0;
-      --md-on-surf-d: #55556a;
-      --md-pri:       #fbbf24;
-      --md-sec:       #f97316;
-      --md-ter:       #4ade80;
-      --md-err:       #f87171;
-      --md-blu:       #60a5fa;
-      --md-pri-10:    rgba(251,191,36,0.10);
-      --md-pri-16:    rgba(251,191,36,0.16);
-      --md-pri-24:    rgba(251,191,36,0.24);
-      --md-err-10:    rgba(248,113,113,0.10);
-      --md-err-16:    rgba(248,113,113,0.16);
-      --md-shape-xs:  4px;
-      --md-shape-s:   8px;
-      --md-shape-m:   12px;
-      --md-shape-l:   16px;
-      --md-shape-xl:  24px;
-      --md-shape-full: 100px;
+      --md-bg:         #0F0F11;
+      --md-surf:       #1A1B1E;
+      --md-surf-1:     #202124;
+      --md-surf-2:     #27282C;
+      --md-out:        #35363A;
+      --md-out-var:    #4A4B50;
+      --md-on-bg:      #E3E3E6;
+      --md-on-surf:    #C4C4C8;
+      --md-on-surf-v:  #8E8E94;
+      --md-on-surf-d:  #56565C;
+      --md-pri:        #8AB4F8;
+      --md-pri-10:     rgba(138,180,248,0.10);
+      --md-pri-16:     rgba(138,180,248,0.16);
+      --md-ter:        #81C995;
+      --md-err:        #F28B82;
+      --md-err-10:     rgba(242,139,130,0.08);
+      --md-warn:       #FDD663;
       --fh: 'Google Sans', 'Roboto', sans-serif;
       --fd: 'Google Sans Display', 'Google Sans', sans-serif;
       --fm: 'Roboto Mono', monospace;
-      --md-dur-s: 100ms;
-      --md-dur-m: 200ms;
-      --md-dur-l: 300ms;
-      --md-dur-xl: 500ms;
-      --md-ease:   cubic-bezier(0.2, 0, 0, 1);
+      --md-shape-xs: 4px; --md-shape-s: 8px; --md-shape-m: 12px;
+      --md-shape-l: 16px; --md-shape-xl: 24px; --md-shape-full: 9999px;
+      --md-dur-m: 200ms; --md-dur-l: 300ms; --md-dur-xl: 450ms;
+      --md-ease: cubic-bezier(0.2, 0, 0, 1);
       --md-ease-e: cubic-bezier(0.05, 0.7, 0.1, 1);
       --HH: 64px;
     }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *:focus { outline: none; }
+    a, button { -webkit-tap-highlight-color: transparent; }
+    ::selection { background: var(--md-pri-16); color: var(--md-on-bg); }
 
-    html { scroll-behavior: smooth; overflow-x: hidden; }
+    html { scroll-behavior: smooth; }
     body {
       background: var(--md-bg); color: var(--md-on-bg);
       font-family: var(--fh); font-size: 14px; line-height: 1.6;
-      min-height: 100vh; overflow-x: hidden;
-      display: flex; flex-direction: column;
+      min-height: 100vh; display: flex; flex-direction: column;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── GRID BACKGROUND ── */
-    body::before {
-      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background-image:
-        linear-gradient(rgba(251,191,36,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(251,191,36,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(ellipse 100% 90% at 50% 0%, #000 40%, transparent 100%);
-      -webkit-mask-image: radial-gradient(ellipse 100% 90% at 50% 0%, #000 40%, transparent 100%);
-    }
-
-    /* ── BLOBS ── */
-    .blob { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(130px); }
-    .b1 {
-      width: 480px; height: 480px;
-      background: radial-gradient(circle, rgba(248,113,113,0.08) 0%, transparent 65%);
-      top: -150px; right: -120px;
-    }
-    .b2 {
-      width: 360px; height: 360px;
-      background: radial-gradient(circle, rgba(251,191,36,0.06) 0%, transparent 65%);
-      bottom: -100px; left: -80px;
-    }
-    .b3 {
-      width: 260px; height: 260px;
-      background: radial-gradient(circle, rgba(96,165,250,0.05) 0%, transparent 65%);
-      top: 45%; left: 58%;
-    }
-
-    /* ── HEADER — MD3 Top App Bar ── */
+    /* ── HEADER ── */
     #hdr {
       position: fixed; top: 0; left: 0; right: 0; z-index: 600; height: var(--HH);
-      background: rgba(10,10,15,0.92);
-      backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
+      background: rgba(15,15,17,0.92);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
       border-bottom: 1px solid var(--md-out);
-      box-shadow: 0 1px 0 var(--md-out), 0 2px 8px rgba(0,0,0,0.2);
     }
-    .hdr-inner {
-      height: 100%; padding: 0 16px;
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    }
-    .hdr-left, .hdr-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    .hdr-mid {
-      font-family: var(--fd); font-size: 15px; font-weight: 700;
-      color: var(--md-on-bg); letter-spacing: -0.01em; flex: 1; text-align: center;
-    }
-    /* MD3 Icon button */
-    .hico {
-      width: 40px; height: 40px; border-radius: var(--md-shape-full);
-      border: none; background: transparent;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; color: var(--md-on-surf-v); font-size: 16px;
-      text-decoration: none;
-      transition: background var(--md-dur-m) var(--md-ease), color var(--md-dur-m);
-      flex-shrink: 0;
-    }
-    .hico:hover { background: rgba(255,255,255,0.07); color: var(--md-on-bg); }
+    .hdr-inner { height: 100%; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .hdr-mid { font-family: var(--fd); font-size: 16px; font-weight: 500; color: var(--md-on-bg); flex: 1; text-align: center; }
+    .hico { width: 40px; height: 40px; border-radius: var(--md-shape-full); border: none; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--md-on-surf-v); font-size: 16px; text-decoration: none; transition: background var(--md-dur-m), color var(--md-dur-m); flex-shrink: 0; }
+    .hico:hover { background: rgba(255,255,255,0.08); color: var(--md-on-bg); }
 
     /* ── MAIN ── */
-    main {
-      position: relative; z-index: 1; flex: 1;
-      display: flex; align-items: center; justify-content: center;
-      padding: calc(var(--HH) + 40px) 22px 64px;
-    }
+    main { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; padding: calc(var(--HH) + 40px) 22px 64px; }
 
-    /* ── ERROR CARD — MD3 Elevated Card ── */
+    /* ── ERROR CARD ── */
     .err-card {
-      width: 100%; max-width: 480px;
-      background: var(--md-surf-1); border: 1px solid var(--md-out);
-      border-radius: var(--md-shape-xl); overflow: hidden; position: relative;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3), 0 16px 48px rgba(0,0,0,0.5);
-      opacity: 0; transform: translateY(24px);
-      animation: md-rise 0.5s var(--md-ease-e) 0.1s forwards;
+      width: 100%; max-width: 460px;
+      background: var(--md-surf); border: 1px solid var(--md-out);
+      border-radius: var(--md-shape-xl); overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.28), 0 8px 32px rgba(0,0,0,0.44);
+      opacity: 0; transform: translateY(20px);
+      animation: rise .45s var(--md-ease-e) .08s forwards;
     }
-    @keyframes md-rise { to { opacity: 1; transform: translateY(0); } }
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 
-    /* MD3 tonal accent bar — error red */
-    .err-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--md-err) 35%, var(--md-sec) 65%, transparent);
-    }
-
-    /* ── TOP SECTION ── */
     .err-top {
       padding: 40px 32px 28px;
       display: flex; flex-direction: column; align-items: center; text-align: center;
-      border-bottom: 1px solid var(--md-out); position: relative; overflow: hidden;
-    }
-    .err-top::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(140deg, rgba(248,113,113,0.04) 0%, transparent 55%);
-      pointer-events: none;
+      border-bottom: 1px solid var(--md-out);
     }
 
-    /* Big 404 */
-    .err-code-wrap { position: relative; margin-bottom: 24px; }
+    /* Error code */
+    .err-code-wrap { position: relative; margin-bottom: 20px; }
     .err-code {
-      font-family: var(--fd); font-weight: 700; font-size: clamp(84px, 18vw, 120px);
+      font-family: var(--fd); font-weight: 700; font-size: clamp(80px, 18vw, 108px);
       letter-spacing: -0.04em; line-height: 1;
-      background: linear-gradient(135deg, var(--md-err) 0%, var(--md-sec) 55%, var(--md-pri) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      position: relative; z-index: 1;
-      animation: code-glow 4s ease-in-out infinite alternate;
+      color: var(--md-surf-3);
     }
-    @keyframes code-glow { 0% { filter: brightness(1); } 100% { filter: brightness(1.16); } }
-    .err-code-ghost {
-      position: absolute; top: 5px; left: 50%; transform: translateX(-50%);
-      font-family: var(--fd); font-weight: 700; font-size: clamp(84px, 18vw, 120px);
-      letter-spacing: -0.04em; line-height: 1; color: transparent;
-      -webkit-text-stroke: 1px rgba(248,113,113,0.10);
-      pointer-events: none; white-space: nowrap;
+    .err-code-overlay {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    }
+    /* 404 number — plain theme error color (no gradient) */
+    .err-code-num {
+      font-family: var(--fd); font-weight: 700; font-size: clamp(80px, 18vw, 108px);
+      letter-spacing: -0.04em; line-height: 1;
+      color: var(--md-err);
     }
 
-    /* MD3 icon container */
+    /* MD3 icon container — now uses proper 404 icon */
     .err-icon {
-      width: 48px; height: 48px; border-radius: var(--md-shape-m);
-      background: var(--md-err-10); border: 1px solid rgba(248,113,113,0.2);
+      width: 52px; height: 52px; border-radius: var(--md-shape-m);
+      background: var(--md-err-10); border: 1px solid rgba(242,139,130,.20);
       display: flex; align-items: center; justify-content: center;
-      font-size: 20px; color: var(--md-err); margin-bottom: 18px;
-      animation: icon-pulse 3s ease-in-out infinite;
+      font-size: 26px; color: var(--md-err); margin-bottom: 18px;
     }
-    @keyframes icon-pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(248,113,113,0); }
-      50% { box-shadow: 0 0 0 8px rgba(248,113,113,0.07); }
-    }
+    .err-title { font-family: var(--fd); font-size: 22px; font-weight: 500; color: var(--md-on-bg); letter-spacing: -.02em; margin-bottom: 8px; }
+    .err-msg { font-family: var(--fh); font-size: 13px; color: var(--md-on-surf); line-height: 1.7; max-width: 300px; }
 
-    .err-title {
-      font-family: var(--fd); font-size: 22px; font-weight: 700;
-      color: var(--md-on-bg); letter-spacing: -0.02em; margin-bottom: 8px;
-    }
-    .err-msg {
-      font-family: var(--fh); font-size: 13px; color: var(--md-on-surf);
-      line-height: 1.7; max-width: 320px;
-    }
-
-    /* Path row — MD3 surface variant */
+    /* Path row */
     .err-path-row {
-      display: flex; align-items: center; gap: 10px;
-      margin-top: 20px;
-      background: var(--md-surf-2); border: 1px solid var(--md-out-var);
+      display: flex; align-items: center; gap: 10px; margin-top: 20px;
+      background: var(--md-surf-1); border: 1px solid var(--md-out);
       border-radius: var(--md-shape-m); padding: 10px 14px;
       max-width: 340px; width: 100%;
     }
     .err-path-ico { font-size: 11px; color: var(--md-on-surf-d); flex-shrink: 0; }
-    .err-path-txt {
-      font-family: var(--fm); font-size: 11px; color: var(--md-on-surf-v);
-      flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;
-    }
-    /* MD3 Assist chip */
-    .err-badge {
-      font-family: var(--fm); font-size: 9px; font-weight: 700;
-      padding: 3px 8px; border-radius: var(--md-shape-xs); letter-spacing: 0.06em; flex-shrink: 0;
-      text-transform: uppercase;
-      background: var(--md-err-10); color: var(--md-err);
-      border: 1px solid rgba(248,113,113,0.18);
-    }
-
-    /* ── DIVIDER ── */
-    .err-divider {
-      height: 1px; background: var(--md-out);
-      position: relative;
-    }
-    .err-divider::before {
-      content: ''; position: absolute; left: 0; top: 0; width: 64px; height: 1px;
-      background: linear-gradient(90deg, var(--md-err), transparent);
-    }
+    .err-path-txt { font-family: var(--fm); font-size: 11px; color: var(--md-on-surf-v); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
+    .err-badge { font-family: var(--fm); font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: var(--md-shape-xs); letter-spacing: .06em; flex-shrink: 0; text-transform: uppercase; background: var(--md-err-10); color: var(--md-err); border: 1px solid rgba(242,139,130,.22); }
 
     /* ── ACTIONS ── */
-    .err-actions { padding: 22px 24px 26px; display: flex; flex-direction: column; gap: 10px; }
+    .err-actions { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 10px; }
 
     /* MD3 Filled button */
     .btn-primary {
       width: 100%; padding: 12px; border-radius: var(--md-shape-full);
-      background: linear-gradient(135deg, var(--md-pri), var(--md-sec));
-      color: #000; font-family: var(--fh); font-size: 13px; font-weight: 600;
-      letter-spacing: 0.02em; border: none; cursor: pointer; text-decoration: none;
+      background: var(--md-pri); color: var(--md-on-pri);
+      font-family: var(--fh); font-size: 14px; font-weight: 500;
+      border: none; cursor: pointer; text-decoration: none;
       display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: opacity var(--md-dur-m), transform var(--md-dur-s), box-shadow var(--md-dur-m);
+      transition: opacity var(--md-dur-m), box-shadow var(--md-dur-m);
+      box-shadow: 0 1px 4px rgba(138,180,248,.2);
     }
-    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(251,191,36,0.28); }
-    .btn-primary:active { transform: translateY(0); box-shadow: none; }
+    .btn-primary:hover { opacity: .88; box-shadow: 0 4px 14px rgba(138,180,248,.3); }
 
-    /* Secondary row */
     .err-sec-row { display: flex; gap: 8px; }
-    /* MD3 Outlined button */
     .btn-sec {
       flex: 1; padding: 10px 12px; border-radius: var(--md-shape-full);
-      background: transparent; border: 1px solid var(--md-out-var);
-      font-family: var(--fh); font-size: 12px; font-weight: 500; letter-spacing: 0.01em;
+      background: transparent; border: 1px solid var(--md-out);
+      font-family: var(--fh); font-size: 12px; font-weight: 500;
       color: var(--md-on-surf); cursor: pointer; text-decoration: none;
       display: flex; align-items: center; justify-content: center; gap: 6px;
       transition: border-color var(--md-dur-m), color var(--md-dur-m), background var(--md-dur-m);
     }
-    .btn-sec:hover { border-color: rgba(251,191,36,0.4); color: var(--md-pri); background: var(--md-pri-10); }
-    .btn-sec:active { background: var(--md-pri-16); }
+    .btn-sec:hover { border-color: var(--md-pri-16); color: var(--md-pri); background: rgba(138,180,248,.08); }
 
     /* ── STATUS STRIP ── */
     .err-strip {
-      padding: 14px 24px;
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      background: rgba(0,0,0,0.1);
-      border-top: 1px solid var(--md-out);
+      padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      background: var(--md-surf-1); border-top: 1px solid var(--md-out);
     }
     .err-strip-left { display: flex; align-items: center; gap: 8px; }
-    .err-strip-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--md-ter); box-shadow: 0 0 6px var(--md-ter);
-      animation: pip 2.4s ease-in-out infinite; flex-shrink: 0;
-    }
-    @keyframes pip { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.6)} }
-    .err-strip-txt {
-      font-family: var(--fh); font-size: 11px; font-weight: 500;
-      color: var(--md-on-surf-d); letter-spacing: 0.04em; text-transform: uppercase;
-    }
-    /* MD3 Assist chip */
-    .err-strip-code {
-      font-family: var(--fm); font-size: 9px; font-weight: 700;
-      padding: 3px 10px; border-radius: var(--md-shape-xs); letter-spacing: 0.08em; text-transform: uppercase;
-      background: var(--md-err-10); color: var(--md-err);
-      border: 1px solid rgba(248,113,113,0.16);
-    }
+    .err-strip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--md-ter); flex-shrink: 0; animation: pip 2.4s ease-in-out infinite; }
+    @keyframes pip { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .err-strip-txt { font-family: var(--fh); font-size: 11px; font-weight: 500; color: var(--md-on-surf-v); letter-spacing: .04em; text-transform: uppercase; }
+    .err-strip-code { font-family: var(--fm); font-size: 9px; font-weight: 700; padding: 3px 10px; border-radius: var(--md-shape-xs); letter-spacing: .08em; text-transform: uppercase; background: var(--md-err-10); color: var(--md-err); border: 1px solid rgba(242,139,130,.20); }
 
     /* ── FOOTER ── */
-    .err-footer {
-      position: relative; z-index: 1;
-      text-align: center; padding: 0 22px 36px;
-      font-family: var(--fh); font-size: 12px; color: var(--md-on-surf-d);
-      opacity: 0; animation: md-rise 0.5s var(--md-ease-e) 0.35s forwards;
-    }
+    .err-footer { position: relative; text-align: center; padding: 0 22px 32px; font-family: var(--fh); font-size: 12px; color: var(--md-on-surf-d); opacity: 0; animation: rise .45s var(--md-ease-e) .3s forwards; }
     .err-footer a { color: var(--md-on-surf-d); text-decoration: none; transition: color var(--md-dur-m); }
     .err-footer a:hover { color: var(--md-pri); }
 
-    /* ── TOAST — MD3 Snackbar ── */
-    #toast {
-      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(16px);
-      background: var(--md-surf-2); border: 1px solid var(--md-out-var);
-      border-radius: var(--md-shape-l); padding: 10px 20px;
-      font-family: var(--fh); font-size: 13px; color: var(--md-on-bg);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 8px 28px rgba(0,0,0,0.5);
-      z-index: 9999; opacity: 0;
-      transition: opacity var(--md-dur-m) var(--md-ease), transform var(--md-dur-m) var(--md-ease-e);
-      pointer-events: none; white-space: nowrap; display: flex; align-items: center; gap: 8px;
-    }
+    /* ── TOAST ── */
+    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(16px); background: #2A2B2E; border: 1px solid var(--md-out); border-radius: var(--md-shape-l); padding: 10px 20px; font-family: var(--fh); font-size: 13px; color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.25); z-index: 9999; opacity: 0; transition: opacity var(--md-dur-m), transform var(--md-dur-m) var(--md-ease-e); pointer-events: none; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
     #toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--md-out-var); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--md-out); border-radius: 4px; }
     @media(max-width:767px) { ::-webkit-scrollbar { display: none; } }
   </style>
 </head>
 <body>
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
-
-  <!-- HEADER -->
   <header id="hdr">
     <div class="hdr-inner">
-      <div class="hdr-left">
-        <a class="hico" href="/" aria-label="Go home"><i class="fas fa-arrow-left"></i></a>
-      </div>
+      <div><a class="hico" href="/" aria-label="Home"><i class="fas fa-arrow-left"></i></a></div>
       <div class="hdr-mid">Page Not Found</div>
-      <div class="hdr-right">
-        <a class="hico" href="/docs" aria-label="Documentation"><i class="fas fa-book"></i></a>
-      </div>
+      <div><a class="hico" href="/docs" aria-label="Docs"><i class="fas fa-book"></i></a></div>
     </div>
   </header>
 
-  <!-- MAIN -->
   <main>
     <div class="err-card">
-
-      <!-- Top: 404 + message -->
       <div class="err-top">
         <div class="err-code-wrap">
-          <div class="err-code-ghost" aria-hidden="true">404</div>
-          <div class="err-code">404</div>
+          <div class="err-code" aria-hidden="true">404</div>
+          <div class="err-code-overlay"><div class="err-code-num">404</div></div>
         </div>
-        <div class="err-icon"><i class="fas fa-route"></i></div>
+
+        <!-- Fixed: proper 404 icon (broken link) -->
+        <div class="err-icon"><i class="fas fa-link-slash"></i></div>
+
         <div class="err-title">Page Not Found</div>
         <div class="err-msg">The endpoint you're looking for doesn't exist, has been moved, or the URL was mistyped.</div>
         <div class="err-path-row">
@@ -355,76 +203,42 @@
           <span class="err-badge">404</span>
         </div>
       </div>
-
-      <div class="err-divider"></div>
-
-      <!-- Actions -->
       <div class="err-actions">
-        <a class="btn-primary" href="/">
-          <i class="fas fa-house" style="font-size:12px;"></i>Back to Home
-        </a>
+        <a class="btn-primary" href="/"><i class="fas fa-house" style="font-size:13px;"></i>Back to Home</a>
         <div class="err-sec-row">
-          <a class="btn-sec" href="/docs">
-            <i class="fas fa-book" style="font-size:11px;"></i>Docs
-          </a>
-          <button class="btn-sec" onclick="history.back()">
-            <i class="fas fa-arrow-left" style="font-size:11px;"></i>Go Back
-          </button>
-          <button class="btn-sec" id="copy-path-btn">
-            <i class="fas fa-copy" style="font-size:11px;"></i>Copy URL
-          </button>
+          <a class="btn-sec" href="/docs"><i class="fas fa-book" style="font-size:11px;"></i>Docs</a>
+          <button class="btn-sec" onclick="history.back()"><i class="fas fa-arrow-left" style="font-size:11px;"></i>Go Back</button>
+          <button class="btn-sec" id="copy-path-btn"><i class="fas fa-copy" style="font-size:11px;"></i>Copy URL</button>
         </div>
       </div>
-
-      <!-- Status strip -->
       <div class="err-strip">
-        <div class="err-strip-left">
-          <span class="err-strip-dot"></span>
-          <span class="err-strip-txt">API server online</span>
-        </div>
+        <div class="err-strip-left"><span class="err-strip-dot"></span><span class="err-strip-txt">API server online</span></div>
         <span class="err-strip-code">HTTP 404</span>
       </div>
-
     </div>
   </main>
 
-  <!-- FOOTER -->
   <footer class="err-footer">
     If you think this is a mistake, check the&nbsp;<a href="/docs">API docs</a>&nbsp;or&nbsp;<a href="/">return home</a>.
   </footer>
 
-  <!-- TOAST -->
-  <div id="toast">
-    <i id="toast-ico" class="fas fa-check" style="font-size:11px;color:var(--md-ter);"></i>
-    <span id="toast-txt"></span>
-  </div>
+  <div id="toast"><i id="toast-ico" class="fas fa-check" style="font-size:11px;"></i><span id="toast-txt"></span></div>
 
   <script>
-    /* Show the actual attempted path */
-    (function() {
-      const el = document.getElementById('err-path');
-      const p  = window.location.pathname + window.location.search;
-      el.textContent = p || '/unknown/path';
-      el.title = window.location.href;
+    (function(){
+      const el=document.getElementById('err-path');
+      const p=window.location.pathname+window.location.search;
+      el.textContent=p||'/unknown/path';el.title=window.location.href;
     })();
-
-    /* Copy URL */
-    document.getElementById('copy-path-btn').addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href)
-        .then(() => showToast('URL copied!'))
-        .catch(() => showToast('Copy failed', true));
+    document.getElementById('copy-path-btn').addEventListener('click',()=>{
+      navigator.clipboard.writeText(window.location.href).then(()=>showToast('URL copied!')).catch(()=>showToast('Copy failed',true));
     });
-
-    /* Toast */
-    function showToast(msg, err = false) {
-      const el  = document.getElementById('toast');
-      const ico = document.getElementById('toast-ico');
-      ico.className = err ? 'fas fa-times-circle' : 'fas fa-check';
-      ico.style.color = err ? 'var(--md-err)' : 'var(--md-ter)';
-      document.getElementById('toast-txt').textContent = msg;
-      el.classList.add('on');
-      clearTimeout(el._tid);
-      el._tid = setTimeout(() => el.classList.remove('on'), 2200);
+    function showToast(msg,err=false){
+      const el=document.getElementById('toast'),ico=document.getElementById('toast-ico');
+      ico.className=err?'fas fa-circle-xmark':'fas fa-circle-check';
+      document.getElementById('toast-txt').textContent=msg;
+      el.classList.add('on');clearTimeout(el._tid);
+      el._tid=setTimeout(()=>el.classList.remove('on'),2200);
     }
   </script>
 </body>
