@@ -765,7 +765,7 @@
       <div class="code-box">
         <div class="rf-line"><span class="cdim">{</span></div>
         <div class="rf-line rf-indent"><span class="ck">"operator"</span><span class="cdim">:&nbsp;</span><span class="cs">"<span id="rf-op">AjiroDesu</span>"</span><span class="cdim">,</span></div>
-        <div class="rf-line rf-indent"><span class="ck">"timestamp"</span><span class="cdim">:&nbsp;</span><span class="cs">"2025-12-27T10:43:41.675Z"</span><span class="cdim">,</span></div>
+        <div class="rf-line rf-indent"><span class="ck">"timestamp"</span><span class="cdim">:&nbsp;</span><span class="cs">"2026-03-29T12:25:00.000Z"</span><span class="cdim">,</span></div>
         <div class="rf-line rf-indent"><span class="ck">"responseTime"</span><span class="cdim">:&nbsp;</span><span class="cv">"4ms"</span><span class="cdim">,</span></div>
         <div class="rf-line rf-indent"><span class="ck">"results"</span><span class="cdim">:&nbsp;</span><span class="cm">// ... your data</span></div>
         <div class="rf-line"><span class="cdim">}</span></div>
@@ -987,11 +987,24 @@ let _notifData=[], _readSet=new Set(), _dismissedSet=new Set();
 let siteUsername='api';
 let currentCurlText='';
 let currentResponseUrl='';
+let lastNotifJSON = '';
 const NP_KEY_READ='np_read', NP_KEY_DISMISSED='np_dismissed';
 
 /* ── UTILS ── */
 function _npSave(){try{localStorage.setItem(NP_KEY_READ,JSON.stringify([..._readSet]));localStorage.setItem(NP_KEY_DISMISSED,JSON.stringify([..._dismissedSet]));}catch(_){}}
 function _npLoad(){try{const r=localStorage.getItem(NP_KEY_READ),d=localStorage.getItem(NP_KEY_DISMISSED);if(r)JSON.parse(r).forEach(i=>_readSet.add(i));if(d)JSON.parse(d).forEach(i=>_dismissedSet.add(i));}catch(_){}}
+
+/* ── NEW: FORMATTED TIME + DATE (DD/MM/YYYY HH:MM) ── */
+function formatNotificationTime(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  const day   = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year  = d.getFullYear();
+  const hours = String(d.getHours()).padStart(2, '0');
+  const mins  = String(d.getMinutes()).padStart(2, '0');
+  return `${hours}:${mins} • ${day}/${month}/${year}`;
+}
 
 function showToast(msg,err=false){
   const el=document.getElementById('toast'),ico=document.getElementById('toast-ico');
@@ -1009,7 +1022,6 @@ function copyText(text,label='Copied!'){
     }catch{showToast('Copy failed',true);}
   });
 }
-function timeAgo(ts){const s=Math.floor((Date.now()-ts)/1000);if(s<60)return s+'s ago';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
 function mpClass(m){return{GET:'mg',POST:'mp_',PUT:'mpu',DELETE:'md_'}[m]||'mm';}
 function revokeBlobUrl(){if(currentBlobUrl){URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=null;}}
 function escAttr(s){return s.replace(/"/g,'&quot;');}
@@ -1146,7 +1158,7 @@ function _renderNpItems(){
         <div class="np-text">
           <div class="np-ititle">${n.title||'Notification'}</div>
           <div class="np-imsg">${n.message||''}</div>
-          <div class="np-itime">${n.time?timeAgo(new Date(n.time).getTime()):''}</div>
+          <div class="np-itime">${n.createdAt ? formatNotificationTime(n.createdAt) : ''}</div>
         </div>
         <button class="np-dismiss" data-idx="${i}" title="Dismiss"><i class="fas fa-xmark"></i></button>
       </div>
@@ -1176,7 +1188,8 @@ function _renderNpItems(){
 }
 
 function renderNotifs(list){
-  _notifData=list;_readSet.clear();_dismissedSet.clear();_npLoad();_renderNpItems();
+  _notifData=list;
+  _readSet.clear();_dismissedSet.clear();_npLoad();_renderNpItems();
 }
 
 document.getElementById('np-mar-btn').addEventListener('click',()=>{
@@ -1503,10 +1516,7 @@ async function runRequest(api){
       }
       mediaOut.appendChild(mediaEl);
 
-      // Store content-type for filename
       mediaOut.dataset.ct = ct;
-
-      // Show download icon in terminal header
       document.getElementById('term-download-btn').style.display = 'flex';
 
     /* ── TEXT / BINARY → classic box (unchanged) ── */
@@ -1567,7 +1577,7 @@ document.getElementById('copy-base').addEventListener('click',()=>copyText(docum
 document.getElementById('copy-ex').addEventListener('click',()=>copyText(document.getElementById('exUrlTxt').textContent,'URL copied!'));
 document.getElementById('copy-rf').addEventListener('click',()=>{
   const op=document.getElementById('rf-op').textContent;
-  copyText(`{"operator":"${op}","timestamp":"2025-12-27T10:43:41.675Z","responseTime":"4ms","results":...}`,'Format copied!');
+  copyText(`{"operator":"${op}","timestamp":"2026-03-29T12:25:00.000Z","responseTime":"4ms","results":...}`,'Format copied!');
 });
 
 /* ── EXAMPLE API ── */
@@ -1585,7 +1595,7 @@ function pickExampleApi(){
 }
 document.getElementById('try-example-btn').addEventListener('click',()=>{if(_exampleApi)openModal(_exampleApi,'page');});
 
-/* ── BOOTSTRAP ── */
+/* ── BOOTSTRAP + REAL-TIME NOTIFICATIONS ── */
 window.addEventListener('load',async()=>{
   const ldr=document.getElementById('ldr'),page=document.getElementById('page');
   try{
@@ -1621,6 +1631,23 @@ window.addEventListener('load',async()=>{
     renderNotifs(nfData.notifications||[]);
     renderSidebar(ALL);
     pickExampleApi();
+
+    /* ── REAL-TIME NOTIFICATIONS (no refresh needed) ── */
+    lastNotifJSON = JSON.stringify((nfData.notifications||[]).map(n => n.id));
+    setInterval(() => {
+      fetch('/notifications')
+        .then(r => r.json())
+        .then(data => {
+          const notifs = data.notifications || [];
+          const currentJSON = JSON.stringify(notifs.map(n => n.id));
+          if (currentJSON !== lastNotifJSON) {
+            lastNotifJSON = currentJSON;
+            renderNotifs(notifs);
+          }
+        })
+        .catch(() => {}); // silent fail
+    }, 6000); // poll every 6 seconds
+
     requestAnimationFrame(()=>{page.classList.add('animate-in');});
   }catch(err){console.error('[docs] bootstrap error:',err);}
   finally{ldr.classList.add('out');}
