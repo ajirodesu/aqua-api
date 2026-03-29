@@ -760,16 +760,39 @@
 
   <!-- Response Format + Error Codes -->
   <div class="igrid">
+    <!-- UPDATED RESPONSE FORMAT: now uses exact same terminal style as API modal responses -->
     <div class="icard">
       <div class="ic-hd"><div class="ic-ico"><i class="fas fa-file-code"></i></div><div><div class="ic-title">Response Format</div><div class="ic-sub">Included in every response</div></div></div>
-      <div class="code-box">
-        <div class="rf-line"><span class="cdim">{</span></div>
-        <div class="rf-line rf-indent"><span class="ck">"operator"</span><span class="cdim">:&nbsp;</span><span class="cs">"<span id="rf-op">AjiroDesu</span>"</span><span class="cdim">,</span></div>
-        <div class="rf-line rf-indent"><span class="ck">"timestamp"</span><span class="cdim">:&nbsp;</span><span class="cs">"2026-03-29T12:25:00.000Z"</span><span class="cdim">,</span></div>
-        <div class="rf-line rf-indent"><span class="ck">"responseTime"</span><span class="cdim">:&nbsp;</span><span class="cv">"4ms"</span><span class="cdim">,</span></div>
-        <div class="rf-line rf-indent"><span class="ck">"results"</span><span class="cdim">:&nbsp;</span><span class="cm">// ... your data</span></div>
-        <div class="rf-line"><span class="cdim">}</span></div>
-        <button class="cbtn" id="copy-rf">Copy</button>
+      <div class="terminal-window" id="rf-terminal-example">
+        <div class="terminal-header">
+          <div class="traffic-lights">
+            <div class="tl tl-r"></div>
+            <div class="tl tl-y"></div>
+            <div class="tl tl-g"></div>
+          </div>
+          <div class="term-hdr-center">
+            <div class="term-status-dot ok"></div>
+            <span class="term-status-code">200</span>
+            <span class="term-ping">4ms</span>
+          </div>
+          <div class="term-header-right">
+            <button class="term-copy-btn" id="rf-copy-btn" title="Copy response format"><i class="far fa-copy"></i></button>
+          </div>
+        </div>
+        <div class="terminal-content" style="max-height:none;padding:16px 18px;">
+          <div class="term-prompt-line">
+            <span class="term-username" id="rf-term-username">operator</span>
+            <span class="term-arrow">➜</span>
+            <span class="term-tilde">~</span>
+            <span class="term-curl-text">response format</span>
+          </div>
+          <pre id="rf-json-output" class="json-output">{
+  <span class="json-key">"operator"</span>: <span class="json-string">"<span id="rf-op">AjiroDesu</span>"</span>,
+  <span class="json-key">"timestamp"</span>: <span class="json-string">"2026-03-29T12:25:00.000Z"</span>,
+  <span class="json-key">"responseTime"</span>: <span class="json-string">"4ms"</span>,
+  <span class="json-key">"results"</span>: <span class="json-null">// ... your data</span>
+}</pre>
+        </div>
       </div>
     </div>
     <div class="icard">
@@ -984,7 +1007,7 @@ async function renderDynIcon(wrap,catName,color){
 let ALL=[], currentApi=null, activeMethod='GET', baseOrigin='';
 let modalSource=null, sbScrollTop=0, currentBlobUrl=null;
 let _notifData=[], _readSet=new Set(), _dismissedSet=new Set();
-let siteUsername='api';
+let siteUsername='api';                    // ← will be set to operator name (lowercase)
 let currentCurlText='';
 let currentResponseUrl='';
 let lastNotifJSON = '';
@@ -1461,7 +1484,7 @@ async function runRequest(api){
       const dot=document.getElementById('term-dot');
       dot.className='term-status-dot'+(resp.ok?' ok':' err');
 
-      document.getElementById('term-username').textContent=siteUsername;
+      document.getElementById('term-username').textContent=siteUsername;   // ← now uses operator name (lowercase)
       const curlDisplay=currentCurlText||`curl "${cleanUrl}"`;
       document.getElementById('term-curl-text').textContent=curlDisplay.replace(/\s*\\\n\s*/g,' ');
 
@@ -1490,7 +1513,7 @@ async function runRequest(api){
       const dot=document.getElementById('term-dot');
       dot.className='term-status-dot'+(resp.ok?' ok':' err');
 
-      document.getElementById('term-username').textContent=siteUsername;
+      document.getElementById('term-username').textContent=siteUsername;   // ← now uses operator name (lowercase)
       const curlDisplay=currentCurlText||`curl "${cleanUrl}"`;
       document.getElementById('term-curl-text').textContent=curlDisplay.replace(/\s*\\\n\s*/g,' ');
 
@@ -1575,10 +1598,6 @@ async function runRequest(api){
 /* ── HOME COPY BUTTONS ── */
 document.getElementById('copy-base').addEventListener('click',()=>copyText(document.getElementById('baseUrlTxt').textContent,'Base URL copied!'));
 document.getElementById('copy-ex').addEventListener('click',()=>copyText(document.getElementById('exUrlTxt').textContent,'URL copied!'));
-document.getElementById('copy-rf').addEventListener('click',()=>{
-  const op=document.getElementById('rf-op').textContent;
-  copyText(`{"operator":"${op}","timestamp":"2026-03-29T12:25:00.000Z","responseTime":"4ms","results":...}`,'Format copied!');
-});
 
 /* ── EXAMPLE API ── */
 let _exampleApi=null;
@@ -1604,7 +1623,8 @@ window.addEventListener('load',async()=>{
     ALL=epData.endpoints||[];
     baseOrigin=window.location.origin;
 
-    siteUsername=(cfg.name||'api').toLowerCase().replace(/[^a-z0-9]/g,'')||'api';
+    /* UPDATED: terminal username now uses OPERATOR name (lowercase) instead of API title */
+    siteUsername = (cfg.operator || 'api').toLowerCase().replace(/[^a-z0-9]/g,'') || 'api';
 
     document.title=(cfg.name||'API')+' — Documentation';
     document.getElementById('hdr-title').textContent=cfg.name||'Documentation';
@@ -1628,9 +1648,23 @@ window.addEventListener('load',async()=>{
     document.getElementById('exUrlTxt').textContent=baseOrigin+'/example/example?text=Hello%2C+world!';
     if(cfg.operator)document.getElementById('rf-op').textContent=cfg.operator;
 
+    /* UPDATED: set lowercase operator name in the new home terminal example */
+    if(document.getElementById('rf-term-username')){
+      document.getElementById('rf-term-username').textContent = siteUsername;
+    }
+
     renderNotifs(nfData.notifications||[]);
     renderSidebar(ALL);
     pickExampleApi();
+
+    /* Home Response Format copy button (now uses the terminal-style copy button) */
+    const rfCopyBtn = document.getElementById('rf-copy-btn');
+    if(rfCopyBtn){
+      rfCopyBtn.addEventListener('click',()=>{
+        const op = document.getElementById('rf-op').textContent || siteUsername;
+        copyText(`{"operator":"${op}","timestamp":"2026-03-29T12:25:00.000Z","responseTime":"4ms","results":...}`,'Format copied!');
+      });
+    }
 
     /* ── REAL-TIME NOTIFICATIONS (no refresh needed) ── */
     lastNotifJSON = JSON.stringify((nfData.notifications||[]).map(n => n.id));
