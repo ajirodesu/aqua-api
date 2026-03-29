@@ -258,7 +258,8 @@
   .np-item.read .np-dot{background:var(--txt-4);box-shadow:none;}
   .np-text{flex:1;min-width:0;}
   .np-ititle{font-family:var(--fh);font-size:12px;font-weight:600;color:var(--txt-1);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .np-imsg{font-family:var(--fh);font-size:11px;color:var(--txt-2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  /* UPDATED: full long message support — removed line-clamp, now shows entire message with natural wrapping */
+  .np-imsg{font-family:var(--fh);font-size:11px;color:var(--txt-2);line-height:1.5;white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;}
   .np-itime{font-size:10px;color:var(--txt-4);margin-top:4px;}
   .np-dismiss{flex-shrink:0;width:24px;height:24px;border-radius:var(--r-full);border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--txt-4);font-size:10px;transition:background var(--dur-m),color var(--dur-m);}
   .np-dismiss:hover{background:rgba(255,69,58,.12);color:var(--red);}

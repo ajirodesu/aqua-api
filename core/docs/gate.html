@@ -116,7 +116,6 @@
   .ltxt{margin-top:14px;font-family:var(--fh);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt-3);}
   .ltxt::after{content:'';animation:ldots 1.4s steps(4,end) infinite;}
   @keyframes ldots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
-  .ltxt::after { content: ''; animation: ldots 1.4s steps(4,end) infinite; }
 
   /* ── HEADER — unified with docs style ── */
   header{
@@ -555,38 +554,56 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-/* ── BOOTSTRAP — unified with docs.html ── */
+/* ── OPTIMIZED LOADER — stays until everything is fully loaded ── */
 window.addEventListener('load', async () => {
   const ldr = document.getElementById('ldr');
   const mainEl = document.querySelector('main');
+
+  // Safety timeout (max 8 seconds)
+  const timeoutId = setTimeout(() => {
+    console.warn('[gate] Loading timeout - forcing hide');
+    ldr.classList.add('out');
+    mainEl.classList.add('show');
+  }, 8000);
+
   try {
     const [setRes, epRes] = await Promise.all([
       fetch('/set'),
       fetch('/endpoints')
     ]);
+
     const cfg = await setRes.json();
     const epData = await epRes.json();
 
-    /* Meta & title */
+    /* Populate content */
     document.title = cfg.name || 'API';
     document.querySelector('meta[name="description"]').content = cfg.description || '';
     document.querySelector('meta[property="og:title"]').content = cfg.name || '';
     document.querySelector('meta[property="og:description"]').content = cfg.description || '';
     document.getElementById('favicon').href = cfg.icon || '/image/icon.png';
 
-    /* Header */
     document.getElementById('headerTitle').textContent = cfg.name || 'API Platform';
 
-    /* Hero */
     document.getElementById('apiName').textContent = cfg.name || '';
     document.getElementById('apiDescription').textContent = cfg.description || '';
     if (cfg.header?.status) document.getElementById('headerStatus').textContent = cfg.header.status;
 
+    /* Hero Image - wait for full load */
     const img = document.getElementById('headerImage');
-    img.src = Array.isArray(cfg.header?.imageSrc) ? cfg.header.imageSrc[0] : (cfg.header?.imageSrc || '');
-    img.alt = cfg.name || 'API';
+    const imageSrc = Array.isArray(cfg.header?.imageSrc) ? cfg.header.imageSrc[0] : (cfg.header?.imageSrc || '');
 
-    /* Dynamic image sizing from config.json */
+    const imageLoadPromise = new Promise(resolve => {
+      if (!imageSrc) return resolve();
+      img.onload = resolve;
+      img.onerror = resolve; // continue even if image fails
+      img.src = imageSrc;
+      img.alt = cfg.name || 'API';
+    });
+
+    /* Wait for fetches + image */
+    await Promise.all([imageLoadPromise]);
+
+    /* Dynamic image sizing */
     if (cfg.header?.imageSize) {
       const sizeConfig = cfg.header.imageSize;
       const sizeStyle = document.createElement('style');
@@ -615,9 +632,11 @@ window.addEventListener('load', async () => {
 
     /* Footer */
     document.getElementById('footerCopyright').textContent = `© ${new Date().getFullYear()} ${cfg.name || 'API'}. All rights reserved.`;
+
   } catch (err) {
     console.error('[gate] bootstrap error:', err);
   } finally {
+    clearTimeout(timeoutId);
     ldr.classList.add('out');
     mainEl.classList.add('show');
   }
