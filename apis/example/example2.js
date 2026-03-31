@@ -11,7 +11,7 @@ export const meta = {
       name: 'text',
       desc: 'choose a text here',
       example: 'Hello, world!',
-      required: false,
+      required: true,
       options: ['Hello', 'Hi', 'Sup', 'Hey', 'Hola', 'Yo']
     }
   ]

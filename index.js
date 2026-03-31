@@ -29,4 +29,4 @@ const manageBotProcess = (script) => {
   });
 };
 
-manageBotProcess('core/main.js');
+manageBotProcess('core/app.js');
