@@ -816,14 +816,17 @@
 <div id="mo" role="dialog" aria-modal="true">
   <div id="modal">
 
-    <!-- Modal Header -->
-    <div class="mhdr">
-      <div class="mhdr-info">
-        <div class="mh-name" id="m-name">API Name</div>
-        <div class="mh-desc" id="m-desc">Description</div>
-      </div>
-      <button class="mh-x" id="m-close"><i class="fas fa-xmark"></i></button>
+    <!-- API MODAL HEADER (updated) -->
+<div class="mhdr">
+  <div class="mhdr-info">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+      <div class="mh-name" id="m-name">API Name</div>
+      <span class="ep-badge" id="ep-badge">GET</span>
     </div>
+    <div class="mh-desc" id="m-desc">Description</div>
+  </div>
+  <button class="mh-x" id="m-close"><i class="fas fa-xmark"></i></button>
+</div>
 
     <!-- Modal Body -->
     <div class="mbody" id="mbody">
@@ -831,7 +834,7 @@
       <!-- Endpoint block — clean, no curl repetition -->
       <div class="ep-block">
         <div class="ep-top">
-          <span class="ep-badge" id="ep-badge">GET</span>
+          <!-- Method badge has been moved to the API name title above -->
           <span class="ep-url-txt" id="ep-url-txt"></span>
           <div class="ep-acts">
             <button class="epbtn" id="ep-copy"><i class="fas fa-copy"></i>&nbsp;Copy</button>
@@ -934,7 +937,8 @@
 ═══════════════════════════════════════════ */
 const ICONIFY_API='https://api.iconify.design';
 const ICON_MAP=[
-  {k:['downloader','download','ytdl','tiktok','video dl','media download'],i:'lucide:download'},
+  {k:['downloader','download','ytdl','tiktok','video dl','media download'],i:'lucide:download'}, {k:['anime','tv','animation','cartoon'],i:'lucide:tv'},
+  {k:['manga','comic','book','manhwa'],i:'lucide:book'},
   {k:['weather','forecast','climate','atmospheric'],i:'lucide:cloud-sun'},
   {k:['ai','artificial intelligence','machine learning','neural','gpt','llm','generative'],i:'ph:robot-duotone'},
   {k:['chatbot','conversational','chat','dialogue'],i:'lucide:message-circle'},
