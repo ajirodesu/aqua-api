@@ -1,8 +1,9 @@
-// core/app.js
 import express from 'express';
 import fs from 'node:fs';
+import { promises as fsPromises } from 'node:fs';
 import path from 'node:path';
 import chalk from 'chalk';
+import compression from 'compression';
 import config from '../json/config.json' with { type: 'json' };
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { networkInterfaces } from 'node:os';
@@ -19,8 +20,10 @@ const NOTIF_PATH = path.join(JSON_DIR, 'notif.json');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 // ──────────────────────────────────────────────────────────────
-// Optimized logger (same output, slightly cleaner internals)
+// Optimized logger (unchanged)
 // ──────────────────────────────────────────────────────────────
 const logger = {
   info: (message) => console.log(chalk.dim.blue('•') + chalk.dim(' info  - ') + message),
@@ -31,39 +34,61 @@ const logger = {
 };
 
 // ──────────────────────────────────────────────────────────────
-// In-memory notification cache (huge win: no FS read on every request)
-// Loaded once at startup, updated only on POST /api/notification
+// In-memory notification cache (still the huge win)
+// Now fully async for stability under concurrent load
 // ──────────────────────────────────────────────────────────────
 let notificationsCache = [];
 
-function loadNotifications() {
+async function loadNotifications() {
   try {
-    const raw = fs.readFileSync(NOTIF_PATH, 'utf8');
+    const raw = await fsPromises.readFile(NOTIF_PATH, 'utf8');
     notificationsCache = JSON.parse(raw);
-  } catch {
-    notificationsCache = []; // file missing or invalid → start fresh
+  } catch (err) {
+    // Silent for missing file (normal first run), warn on other errors
+    if (err.code !== 'ENOENT') {
+      logger.warn(`Failed to load notifications: ${err.message}`);
+    }
+    notificationsCache = [];
   }
 }
 
-function saveNotifications() {
+async function saveNotifications() {
   try {
-    fs.writeFileSync(NOTIF_PATH, JSON.stringify(notificationsCache, null, 2));
+    await fsPromises.writeFile(NOTIF_PATH, JSON.stringify(notificationsCache, null, 2));
   } catch (err) {
     logger.error(`Failed to save notifications: ${err.message}`);
   }
 }
 
 // ──────────────────────────────────────────────────────────────
-// Core Express setup
+// Core Express setup - OPTIMIZED ORDER FOR PERFORMANCE + BANDWIDTH
 // ──────────────────────────────────────────────────────────────
+logger.info('Starting server initialization...');
+
 app.set('trust proxy', true);
-app.set('json spaces', 2);
+app.set('json spaces', isProduction ? 0 : 2); // compact JSON in production = bandwidth win
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// 1. Compression - BIGGEST bandwidth saver (gzip text responses)
+app.use(
+  compression({
+    threshold: 1024, // only compress responses > 1KB
+    level: isProduction ? 9 : 6, // max compression in prod
+  })
+);
 
-// Serve static assets from core/web (fast path)
-app.use('/', express.static(WEB_DIR));
+// 2. Static assets FIRST (perf + caching)
+app.use(
+  '/',
+  express.static(WEB_DIR, {
+    maxAge: isProduction ? 86400000 : 0, // 1 day cache in prod, no cache in dev
+    etag: true,
+    lastModified: true,
+  })
+);
+
+// 3. Body parsers AFTER static (static requests skip them entirely)
+app.use(express.json({ limit: '1mb' })); // stability: prevent huge payloads
+app.use(express.urlencoded({ extended: false, limit: '1mb' }));
 
 // Middleware: record request start time for accurate responseTime
 app.use((req, res, next) => {
@@ -71,11 +96,8 @@ app.use((req, res, next) => {
   next();
 });
 
-logger.info('Starting server initialization...');
-
 // ──────────────────────────────────────────────────────────────
-// Smart JSON response wrapper (auto-injects operator, timestamp, responseTime)
-// Fixed: no longer corrupts arrays by spreading them
+// Smart JSON response wrapper (unchanged - still clean)
 // ──────────────────────────────────────────────────────────────
 app.use((req, res, next) => {
   const originalJson = res.json;
@@ -101,7 +123,7 @@ app.use((req, res, next) => {
 });
 
 // ──────────────────────────────────────────────────────────────
-// Dynamic endpoint loader (unchanged core logic, just cleaner)
+// Dynamic endpoint loader (unchanged core logic)
 // ──────────────────────────────────────────────────────────────
 async function loadEndpointsFromDirectory(directory, categoryPath = '') {
   let endpoints = [];
@@ -136,7 +158,6 @@ async function loadEndpointsFromDirectory(directory, categoryPath = '') {
           const catSlug = cat.toLowerCase().replace(/[\ /]/g, '-');
           const route = `/${catSlug}/${name}`;
 
-          // Register handler (kept as app.all for full compatibility with existing modules)
           app.all(route, async (req, res, next) => {
             try {
               await mod.onStart({ req, res });
@@ -150,7 +171,6 @@ async function loadEndpointsFromDirectory(directory, categoryPath = '') {
             displayPath += '?' + mod.meta.params.map(p => `${p.name}=`).join('&');
           }
 
-          // Group by category for /endpoints docs
           let bucket = endpoints.find(e => e.name === cat);
           if (!bucket) {
             bucket = { name: cat, items: [] };
@@ -186,7 +206,7 @@ app.get('/', (req, res) => res.sendFile(path.join(WEB_DIR, 'gate.html')));
 app.get('/docs', (req, res) => res.sendFile(path.join(WEB_DIR, 'docs.html')));
 
 // ──────────────────────────────────────────────────────────────
-// Load all API endpoints from /apis (top-level await is perfect here)
+// Load all API endpoints from /apis
 // ──────────────────────────────────────────────────────────────
 logger.info('Loading API endpoints...');
 const allEndpoints = await loadEndpointsFromDirectory('apis');
@@ -194,7 +214,7 @@ const totalEndpoints = allEndpoints.reduce((total, cat) => total + cat.items.len
 logger.ready(`Loaded ${totalEndpoints} endpoints`);
 
 // ──────────────────────────────────────────────────────────────
-// Built-in routes (now using cached notifications)
+// Built-in routes (now benefit from compression + compact JSON)
 // ──────────────────────────────────────────────────────────────
 app.get('/endpoints', (req, res) => {
   res.json({
@@ -216,7 +236,7 @@ app.get('/notifications', (req, res) => {
   res.json({ notifications: notificationsCache });
 });
 
-// Admin notification endpoint
+// Admin notification endpoint (now async save)
 app.post('/api/notification', async (req, res) => {
   const apiKey = process.env.API_KEY || config.key;
   if (req.headers.authorization !== apiKey) {
@@ -227,7 +247,7 @@ app.post('/api/notification', async (req, res) => {
 
   if (clear) {
     notificationsCache = [];
-    saveNotifications();
+    await saveNotifications();
     return res.json({ success: true, cleared: true });
   }
 
@@ -243,7 +263,7 @@ app.post('/api/notification', async (req, res) => {
   };
 
   notificationsCache.push(newNotif);
-  saveNotifications();
+  await saveNotifications();
 
   res.json({ success: true });
 });
@@ -262,9 +282,9 @@ app.use((err, req, res, next) => {
 });
 
 // ──────────────────────────────────────────────────────────────
-// Final startup
+// Final startup (async cache load)
 // ──────────────────────────────────────────────────────────────
-loadNotifications(); // ← one-time cache population
+await loadNotifications(); // ← one-time async cache population
 
 app.listen(PORT, () => {
   logger.ready(`Server started successfully`);
