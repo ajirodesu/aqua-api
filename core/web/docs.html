@@ -1565,19 +1565,63 @@ async function runRequest(api){
       mediaOut.dataset.ct = ct;
       document.getElementById('term-download-btn').style.display = 'flex';
 
-    /* ── TEXT / BINARY → classic box (unchanged) ── */
+    /* ── TEXT → terminal if error, classic if ok ── */
     }else if(ct.startsWith('text/')){
       const text=await resp.text();
-      document.getElementById('res-topbar').style.display='flex';
-      document.getElementById('res-classic-box').style.display='block';
-      document.getElementById('res-terminal').style.display='none';
-      document.getElementById('res-status').textContent=resp.status+' '+(resp.ok?'OK':'Error');
-      document.getElementById('res-status').className='res-status '+(resp.ok?'rok':'rerr');
-      document.getElementById('res-time').textContent=elapsed+'ms';
-      document.getElementById('res-type').textContent='Text';
-      document.getElementById('res-copy').onclick=()=>copyText(text,'Text copied!');
-      document.getElementById('res-pre').className='res-pre';
-      document.getElementById('res-pre').textContent=text;
+      if(!resp.ok){
+        document.getElementById('res-topbar').style.display='none';
+        document.getElementById('res-classic-box').style.display='none';
+        const termEl=document.getElementById('res-terminal');
+        termEl.style.display='block';
+        const code=resp.status;
+        document.getElementById('term-status-code').textContent=String(code);
+        document.getElementById('term-status-code').style.color=statusColorVar(code);
+        document.getElementById('term-ping').textContent=elapsed+'ms';
+        document.getElementById('term-dot').className='term-status-dot err';
+        document.getElementById('term-username').textContent=siteUsername;
+        document.getElementById('term-curl-text').textContent=(currentCurlText||`curl "${cleanUrl}"`).replace(/\s*\\\n\s*/g,' ');
+        document.getElementById('term-media-output').style.display='none';
+        const output=document.getElementById('term-json-output');
+        output.style.display='block';
+        let highlighted;
+        try{highlighted=syntaxHighlight(text);}catch(_){highlighted=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+        output.innerHTML=highlighted;
+        const tokens=output.querySelectorAll('span');
+        tokens.forEach((t,i)=>{t.style.animationDelay=`${Math.min(i*10,600)}ms`;t.classList.add('tok-anim');});
+      }else{
+        document.getElementById('res-topbar').style.display='flex';
+        document.getElementById('res-classic-box').style.display='block';
+        document.getElementById('res-terminal').style.display='none';
+        document.getElementById('res-status').textContent=resp.status+' OK';
+        document.getElementById('res-status').className='res-status rok';
+        document.getElementById('res-time').textContent=elapsed+'ms';
+        document.getElementById('res-type').textContent='Text';
+        document.getElementById('res-copy').onclick=()=>copyText(text,'Text copied!');
+        document.getElementById('res-pre').className='res-pre';
+        document.getElementById('res-pre').textContent=text;
+      }
+    /* ── BINARY → terminal if error, download box if ok ── */
+    }else if(!resp.ok){
+      const text=await resp.text().catch(()=>'');
+      document.getElementById('res-topbar').style.display='none';
+      document.getElementById('res-classic-box').style.display='none';
+      const termEl=document.getElementById('res-terminal');
+      termEl.style.display='block';
+      const code=resp.status;
+      document.getElementById('term-status-code').textContent=String(code);
+      document.getElementById('term-status-code').style.color=statusColorVar(code);
+      document.getElementById('term-ping').textContent=elapsed+'ms';
+      document.getElementById('term-dot').className='term-status-dot err';
+      document.getElementById('term-username').textContent=siteUsername;
+      document.getElementById('term-curl-text').textContent=(currentCurlText||`curl "${cleanUrl}"`).replace(/\s*\\\n\s*/g,' ');
+      document.getElementById('term-media-output').style.display='none';
+      const output=document.getElementById('term-json-output');
+      output.style.display='block';
+      let highlighted;
+      try{highlighted=syntaxHighlight(text||`{"status":${code},"error":"${resp.statusText||'Error'}"}`);}catch(_){highlighted=(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+      output.innerHTML=highlighted;
+      const tokens=output.querySelectorAll('span');
+      tokens.forEach((t,i)=>{t.style.animationDelay=`${Math.min(i*10,600)}ms`;t.classList.add('tok-anim');});
     }else{
       const blob=await resp.blob();
       currentBlobUrl=URL.createObjectURL(blob);
@@ -1585,8 +1629,8 @@ async function runRequest(api){
       document.getElementById('res-topbar').style.display='flex';
       document.getElementById('res-classic-box').style.display='block';
       document.getElementById('res-terminal').style.display='none';
-      document.getElementById('res-status').textContent=resp.status+' '+(resp.ok?'OK':'Error');
-      document.getElementById('res-status').className='res-status '+(resp.ok?'rok':'rerr');
+      document.getElementById('res-status').textContent=resp.status+' OK';
+      document.getElementById('res-status').className='res-status rok';
       document.getElementById('res-time').textContent=elapsed+'ms';
       document.getElementById('res-type').textContent=ct||'Binary';
       document.getElementById('res-copy').onclick=()=>copyText(currentBlobUrl,'URL copied!');
@@ -1604,14 +1648,23 @@ async function runRequest(api){
     setTimeout(()=>resWrap.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
 
   }catch(err){
-    document.getElementById('res-topbar').style.display='flex';
-    document.getElementById('res-classic-box').style.display='block';
-    document.getElementById('res-terminal').style.display='none';
-    document.getElementById('res-status').textContent='Error';document.getElementById('res-status').className='res-status rerr';
-    document.getElementById('res-time').textContent='';document.getElementById('res-type').textContent='';
-    document.getElementById('res-copy').onclick=()=>copyText(err.message||'Network error','Copied!');
-    document.getElementById('res-pre').className='res-pre';
-    document.getElementById('res-pre').innerHTML=`<span style="color:var(--red);">${err.message||'Network error'}</span>`;
+    document.getElementById('res-topbar').style.display='none';
+    document.getElementById('res-classic-box').style.display='none';
+    const termEl=document.getElementById('res-terminal');
+    termEl.style.display='block';
+    document.getElementById('term-status-code').textContent='ERR';
+    document.getElementById('term-status-code').style.color='var(--red)';
+    document.getElementById('term-ping').textContent='failed';
+    document.getElementById('term-dot').className='term-status-dot err';
+    document.getElementById('term-username').textContent=siteUsername;
+    document.getElementById('term-curl-text').textContent=(currentCurlText||`curl "${cleanUrl}"`).replace(/\s*\\\n\s*/g,' ');
+    document.getElementById('term-media-output').style.display='none';
+    const output=document.getElementById('term-json-output');
+    output.style.display='block';
+    const errPayload={error:'Network Error',message:err.message||'Failed to reach the server. Check your connection and try again.'};
+    output.innerHTML=syntaxHighlight(JSON.stringify(errPayload,null,2));
+    const tokens=output.querySelectorAll('span');
+    tokens.forEach((t,i)=>{t.style.animationDelay=`${Math.min(i*10,600)}ms`;t.classList.add('tok-anim');});
   }finally{
     btn.disabled=false;
     btn.innerHTML='<i class="fas fa-play" style="font-size:11px;"></i>Send Again';
